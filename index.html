@@ -1,0 +1,910 @@
+<!doctype html>
+<!-- ─────────────────────────────────────────────────────────────
+     seungbin hong — financial forecasting × ai
+     one html file. two typefaces. no frameworks, no trackers.
+     the only moving part is Fig. 1: a geometric-Brownian-motion
+     path whose forecast cone is re-derived, in closed form, from
+     the live price at every frame. everything else holds still,
+     the way a printed page does.
+     view-source is part of the site. welcome.
+     ───────────────────────────────────────────────────────────── -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SeungBin Hong — Financial Forecasting × AI</title>
+<meta name="description" content="SeungBin Hong — multimodal financial forecasting. M.S. Data Science at Jeju National University; consultant on WorldQuant BRAIN; first-author work on FX and crypto forecasting.">
+<meta name="color-scheme" content="light dark">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#F6F2E9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#161410" media="(prefers-color-scheme: dark)">
+<meta property="og:title" content="SeungBin Hong">
+<meta property="og:description" content="Financial forecasting × AI. Markets are distributions, not points.">
+<meta property="og:type" content="website">
+<link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" fill="%23F6F2E9"/><path d="M8 40 L28 34" stroke="%23201D16" stroke-width="3" fill="none"/><path d="M28 34 L56 22 L56 46 Z" fill="%238C2F1B" fill-opacity=".55"/><circle cx="28" cy="34" r="4" fill="%238C2F1B"/></svg>'>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "SeungBin Hong",
+  "alternateName": "홍승빈",
+  "jobTitle": "Financial Forecasting × AI",
+  "url": "https://hongrizon.github.io",
+  "affiliation": { "@type": "CollegeOrUniversity", "name": "Jeju National University" },
+  "sameAs": ["https://github.com/HongRizon", "https://www.linkedin.com/in/seungbin-hong-224a8b316", "https://scholar.google.com/citations?user=oG6zMokAAAAJ"]
+}
+</script>
+<style>
+/* ————————————————— tokens ————————————————— */
+:root{
+  --paper:#F6F2E9;         /* warm book paper */
+  --ink:#221E15;           /* warm near-black */
+  --faint:#6F6858;         /* secondary ink */
+  --rule:rgba(34,30,21,.16);      /* hairlines */
+  --rule-soft:rgba(34,30,21,.09);
+  --accent:#8C2F1B;        /* oxblood — the colour of inference */
+  --accent-ink:#74250F;    /* darker oxblood for small text */
+  --rail:172px;
+  --gut:clamp(26px,4.5vw,58px);
+  --serif:"Newsreader","Iowan Old Style",Georgia,"Times New Roman",serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#161410;       /* lamplight, not #000 */
+    --ink:#E9E4D6;
+    --faint:#A29981;
+    --rule:rgba(233,228,214,.17);
+    --rule-soft:rgba(233,228,214,.09);
+    --accent:#D9714F;
+    --accent-ink:#E07E5C;
+  }
+}
+
+/* ————————————————— base ————————————————— */
+*,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
+html{ font-optical-sizing:auto; scroll-behavior:smooth; background:var(--paper); }
+@media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+body{
+  color:var(--ink);
+  font-family:var(--serif); font-weight:400;
+  font-size:1.06rem; line-height:1.68;
+  font-kerning:normal;
+  font-synthesis:none;
+  text-rendering:optimizeLegibility;
+  padding-left:env(safe-area-inset-left); padding-right:env(safe-area-inset-right);
+}
+@media (prefers-color-scheme: dark){
+  body{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+}
+p{ max-width:62ch; text-wrap:pretty; hanging-punctuation:first last; }
+h1,h2,h3{ text-wrap:balance; font-weight:500; }
+em,i{ font-style:italic; }
+::selection{ background:color-mix(in srgb, var(--accent) 24%, transparent); }
+a{
+  color:inherit; text-decoration-line:underline;
+  text-decoration-color:color-mix(in srgb, var(--accent) 55%, transparent);
+  text-decoration-thickness:1px; text-underline-offset:3px;
+  transition:text-decoration-color .15s ease, color .15s ease;
+}
+a:hover{ text-decoration-color:var(--accent); color:var(--accent-ink); }
+a:focus-visible,button:focus-visible{
+  outline:2px solid var(--accent); outline-offset:3px; border-radius:1px;
+}
+.skip-link{
+  position:absolute; left:-9999px; top:0; background:var(--ink); color:var(--paper);
+  padding:.5rem .9rem; z-index:10; text-decoration:none;
+}
+.skip-link:focus{ left:12px; top:12px; }
+
+/* ————————————————— page frame ————————————————— */
+.sheet{ max-width:1120px; margin-inline:auto; padding-inline:clamp(20px,5vw,52px); }
+
+/* header — quiet, static, a running head. not sticky: paper doesn't follow you. */
+header.mast{
+  display:flex; align-items:baseline; justify-content:space-between; gap:1rem;
+  padding-block:20px 16px; border-bottom:3px double var(--rule);
+}
+.mast .name{ font-size:.72rem; font-weight:500; letter-spacing:.16em; text-transform:uppercase; white-space:nowrap; }
+.mast nav{ display:flex; gap:clamp(.7rem,2vw,1.35rem); flex-wrap:wrap; }
+.mast a{ font-size:.83rem; color:var(--faint); text-decoration:none; }
+.mast a:hover{ color:var(--accent-ink); text-decoration:underline;
+  text-decoration-color:var(--accent); text-underline-offset:3px; }
+
+/* rows: margin rail + body. the rail carries the apparatus —
+   section marks, figure numbers, the Korean gloss of the name. */
+.row{
+  display:grid; grid-template-columns:var(--rail) minmax(0,1fr);
+  column-gap:var(--gut);
+  border-top:1px solid var(--rule);
+  padding-block:34px 40px;
+}
+.row.first{ border-top:0; padding-top:clamp(40px,7vh,74px); }
+.rail{
+  font-size:.7rem; font-weight:500; letter-spacing:.17em; text-transform:uppercase;
+  color:var(--faint); padding-top:.45em;
+}
+.rail .sub{ display:block; margin-top:.7em; letter-spacing:.05em; text-transform:none;
+  font-weight:400; font-size:.78rem; }
+h2.rail{ font-size:.7rem; }  /* real headings, typeset as margin marks */
+
+@media (max-width: 1023px){
+  .row{ grid-template-columns:1fr; row-gap:14px; padding-block:28px 32px; }
+  .rail{ padding-top:0; }
+}
+
+/* ————————————————— title block ————————————————— */
+.title h1{
+  text-box:trim-both cap alphabetic;
+  font-size:clamp(2.55rem,7.4vw,4.7rem);
+  font-weight:380; line-height:1.02; letter-spacing:-.016em;
+  margin-bottom:.34em; max-width:14ch;
+}
+.title .role{
+  font-size:clamp(1.02rem,2vw,1.16rem); color:var(--faint); margin-bottom:1.5em;
+}
+.title .thesis{
+  font-style:italic; font-weight:380;
+  font-size:clamp(1.28rem,2.8vw,1.62rem); line-height:1.38;
+  max-width:30ch; margin-bottom:1.15em;
+}
+.title .thesis b{ font-weight:460; font-style:italic; color:var(--accent-ink); }
+.title .intro{ color:var(--ink); }
+.title .meta{ margin-top:1.35em; font-size:.85rem; color:var(--faint); }
+[lang="ko"]{ font-family:"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",var(--serif); }
+
+/* ————————————————— figure ————————————————— */
+.fig{ margin-top:6px; }
+.fig-frame{
+  border-top:1px solid var(--rule); border-bottom:1px solid var(--rule);
+  padding-block:10px 6px;
+}
+#forecast-canvas{
+  display:block; width:100%;
+  height:clamp(280px,44vh,430px);
+  touch-action:pan-y; cursor:crosshair;
+}
+#forecast-canvas:focus-visible{ outline:2px solid var(--accent); outline-offset:4px; }
+.no-canvas{ font-size:.85rem; color:var(--faint); padding:2rem 0; font-style:italic; }
+figcaption{
+  margin-top:12px; font-size:.85rem; line-height:1.62; color:var(--faint);
+  max-width:70ch;
+}
+figcaption .lede{ color:var(--ink); }
+.fig-data{
+  display:block; margin-top:9px;
+  font-family:var(--mono); font-size:.7rem; letter-spacing:.01em;
+  color:var(--faint); font-variant-numeric:tabular-nums;
+}
+.fig-data b{ font-weight:500; color:var(--ink); }
+.fig-data sub{ font-size:.78em; }
+#resim{
+  font-family:var(--mono); font-size:.7rem; color:var(--accent-ink);
+  background:none; border:0; padding:0; cursor:pointer;
+  text-decoration:underline; text-underline-offset:3px;
+  text-decoration-color:color-mix(in srgb, var(--accent) 55%, transparent);
+}
+#resim:hover{ text-decoration-color:var(--accent); }
+noscript p{ font-size:.85rem; font-style:italic; color:var(--faint); margin-top:10px; }
+
+/* ————————————————— focus (run-in entries, no cards) ————————————————— */
+.runins > div{ margin-bottom:1.15em; max-width:66ch; }
+.runins b{ font-weight:500; }
+.runins b::after{ content:" — "; color:var(--faint); font-weight:400; }
+
+/* ————————————————— experience ————————————————— */
+.xp{ border-top:1px solid var(--rule-soft); padding-block:15px;
+  display:grid; grid-template-columns:minmax(0,1fr) auto; column-gap:1.4rem; }
+.xp:first-child{ border-top:0; padding-top:0; }
+.xp .what b{ font-weight:500; }
+.xp .what .org{ color:var(--faint); }
+.xp .what p{ font-size:.93rem; color:var(--faint); margin-top:.25em; max-width:56ch; }
+.xp .when{
+  font-family:var(--mono); font-size:.72rem; color:var(--faint);
+  font-variant-numeric:tabular-nums; padding-top:.35em; white-space:nowrap;
+}
+
+
+/* ————————————————— writing: a references list ————————————————— */
+.refs{ list-style:none; counter-reset:ref; max-width:66ch; }
+.refs li{
+  counter-increment:ref; position:relative;
+  padding-left:2.35em; text-indent:0; margin-bottom:.85em;
+}
+.refs li::before{
+  content:"[" counter(ref) "]";
+  position:absolute; left:0; top:.18em;
+  font-family:var(--mono); font-size:.72rem; color:var(--faint);
+}
+.refs i{ font-style:italic; }
+.refs .yr{ font-family:var(--mono); font-size:.72rem; color:var(--faint); }
+.refs .st{
+  font-family:var(--mono); font-size:.6rem; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--faint); margin-left:.45rem; white-space:nowrap;
+}
+.refs .st.on{ color:var(--accent-ink); }
+.clip{ display:none; }
+.fold-btn{
+  font-family:var(--mono); font-size:.7rem; color:var(--accent-ink);
+  background:none; border:0; padding:0; margin-top:14px; cursor:pointer;
+  text-decoration:underline; text-underline-offset:3px;
+  text-decoration-color:color-mix(in srgb, var(--accent) 55%, transparent);
+}
+.fold-btn:hover{ text-decoration-color:var(--accent); }
+.fold-li{ padding-left:0; margin-bottom:0; }
+.fold-li::before{ content:none; }
+
+/* ————————————————— toolkit ————————————————— */
+.kit{ list-style:none; columns:2; column-gap:var(--gut); max-width:64ch; }
+.kit li{ break-inside:avoid; padding-block:3px; font-size:.93rem; }
+.kit li b{ font-weight:500; }
+.kit li span{ color:var(--faint); }
+@media (max-width:560px){ .kit{ columns:1; } }
+@media (max-width:480px){ p{ hyphens:auto; -webkit-hyphens:auto; } }
+
+/* ————————————————— contact / footer ————————————————— */
+.contact .credo{
+  font-style:italic; font-size:1.06rem; line-height:1.62;
+  max-width:44ch; text-wrap:balance;
+}
+.contact p{ max-width:56ch; }
+.contact .links{ margin-top:1.05em; font-size:.98rem; }
+.contact .links a{ margin-right:1.35rem; }
+footer.colo{
+  border-top:1px solid var(--rule); padding-block:20px 34px;
+  display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap;
+  font-size:.78rem; color:var(--faint);
+}
+footer.colo .sig{ font-style:italic; }
+
+/* ————————————————— print: this page is its own CV ————————————————— */
+@media print{
+  :root{
+    --paper:#fff; --ink:#191510; --faint:#5c564a;
+    --rule:rgba(25,21,16,.3); --rule-soft:rgba(25,21,16,.16);
+    --accent:#8C2F1B; --accent-ink:#74250F;
+  }
+  @page{ margin:16mm 15mm; }
+  body{ font-size:10.4pt; line-height:1.52; }
+  header.mast nav,.skip-link,#resim,.live-only{ display:none !important; }
+  .fold-btn{ display:none !important; }
+  .clip{ display:block !important; }
+  li.clip{ display:list-item !important; }
+  html{ background:#fff; }
+  .row{ padding-block:16pt 18pt; break-inside:auto; }
+  .row.first{ padding-top:4pt; }
+  .xp,.refs li{ break-inside:avoid; }
+  #forecast-canvas{ height:220px; }
+  a{ text-decoration:none; color:inherit; }
+  .contact .links a::after{
+    content:" (" attr(href) ")";
+    font-family:var(--mono); font-size:.66rem; color:var(--faint);
+  }
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<div class="sheet">
+
+<header class="mast">
+  <span class="name">SeungBin Hong</span>
+  <nav aria-label="Sections">
+    <a href="#focus">Focus</a>
+    <a href="#experience">Experience</a>
+    <a href="#papers">Papers</a>
+    <a href="#honors">Honors</a>
+    <a href="#education">Education</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<main id="main">
+
+  <!-- ————— title block + Fig. 1 ————— -->
+  <section class="row first title" aria-label="Introduction">
+    <div class="rail" aria-hidden="false">
+      <span lang="ko">홍승빈</span>
+      <span class="sub">Financial forecasting<br>× artificial intelligence</span>
+    </div>
+    <div>
+      <h1>SeungBin Hong</h1>
+      <p class="role">Quantitative researcher &amp; engineer — forecasting under uncertainty.</p>
+      <p class="thesis">Markets are <b>distributions</b>, not points; a forecast that hides its own uncertainty is a guess wearing a suit.</p>
+      <p class="intro">
+        I build forecasting systems for financial markets: probabilistic models that are honest about
+        what they don’t know, and the engineering that keeps them honest in production.
+        Currently an M.S. student in Data Science at Jeju National University and a consultant
+        on WorldQuant BRAIN, with first-author work on multimodal forecasting for currency
+        and crypto markets.
+      </p>
+      <p class="meta">Based in Jeju, KR.</p>
+    </div>
+  </section>
+
+  <!-- ————— the one moving thing ————— -->
+  <section class="row" aria-label="Figure 1: live forecast">
+    <p class="rail">Fig.&hairsp;1<span class="sub">A forecast,<br>re-aimed live</span></p>
+    <figure class="fig">
+      <div class="fig-frame">
+        <canvas id="forecast-canvas" tabindex="0"
+          aria-label="Animated chart: a simulated price path advances one step at a time while quantile forecast bands are recomputed from the latest price.">
+          <p class="no-canvas">Your browser can’t draw the figure — the model, for the record:
+          S&#8321; = S&#8320;·exp((μ−σ²/2)+σZ), forecast cone from closed-form lognormal quantiles.</p>
+        </canvas>
+      </div>
+      <figcaption>
+        <span class="lede">Geometric Brownian motion, forecast in real time.</span>
+        The ink line is the realized path; the oxblood wash marks conditional quantile bands
+        (P05–P95) re-derived in closed form from the live price at every frame — the forecast
+        literally re-aims as reality unfolds.<span class="live-only"> Hover to read the path.</span>
+        <span class="fig-data">
+          S <b id="tel-spot">—</b>&ensp;·&ensp;σ<sub>ann</sub> <b id="tel-vol">—</b>&ensp;·&ensp;μ<sub>ann</sub> <b id="tel-drift">—</b>&ensp;·&ensp;seed <b id="seed-value">—</b><span class="live-only">&ensp;·&ensp;<button id="resim" type="button">resimulate ↻</button></span>
+        </span>
+      </figcaption>
+      <noscript><p>JavaScript is off, so the figure holds still. Everything else on this page works without it.</p></noscript>
+    </figure>
+  </section>
+
+  <!-- ————— focus ————— -->
+  <section class="row" id="focus">
+    <h2 class="rail">Focus</h2>
+    <div class="runins">
+      <div><b>Multimodal market forecasting</b>fusing price series with text and image signals —
+        macro news, volume-encoded candlesticks, vision transformers — for directional calls
+        on FX and crypto.</div>
+      <div><b>Forecasts as distributions</b>models judged on the whole predictive distribution,
+        with leakage-proof validation and calibration as a first-class metric, not an afterthought.</div>
+      <div><b>Research engineering</b>reproducible pipelines from raw data to backtest — seeded,
+        versioned, and fast enough to make honest iteration cheap.</div>
+    </div>
+  </section>
+
+  <!-- ————— experience ————— -->
+  <section class="row" id="experience">
+    <h2 class="rail">Experience</h2>
+    <div data-fold="3">
+      <div class="xp">
+        <div class="what"><b>Consultant</b> <span class="org">· WorldQuant BRAIN</span>
+          <p>Alpha research on the BRAIN platform — custom Python alpha signals with
+          out-of-sample evaluation.</p></div>
+        <div class="when">2024 —</div>
+      </div>
+      <div class="xp">
+        <div class="what"><b>Student Researcher</b> <span class="org">· Dept. of Data Science, Jeju National University</span>
+          <p>Financial time-series and multimodal forecasting research.</p></div>
+        <div class="when">2025 — 26</div>
+      </div>
+      <div class="xp">
+        <div class="what"><b>Undergraduate Researcher</b> <span class="org">· Social Data Science Education &amp; Research Group, JNU</span>
+          <p>Undergraduate research program in social data science.</p></div>
+        <div class="when">2025</div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ————— papers ————— -->
+  <section class="row" id="papers">
+    <h2 class="rail">Papers<span class="sub" aria-hidden="true">All first-author</span></h2>
+    <ol class="refs" data-fold="3">
+      <li><i>Macro-FX multimodal fusion (MFMF): USD/KRW directional forecasting.</i>
+        <span class="yr">KDISS, 2026</span> <span class="st">published</span></li>
+      <li><i>Machine learning-based cryptocurrency forecasting and trading:
+        evaluating the effect of a timing overlay.</i>
+        <span class="yr">ICICPE, 2025</span> <span class="st">published</span></li>
+      <li><i>Volume-encoded candlesticks for real-time stablecoin volatility
+        detection with ViT.</i>
+        <span class="yr">ACK, 2025</span> <span class="st">published</span></li>
+    </ol>
+  </section>
+
+  <!-- ————— honors ————— -->
+  <section class="row" id="honors">
+    <h2 class="rail">Honors</h2>
+    <div data-fold="3">
+      <div class="xp">
+        <div class="what"><b>2nd Place, Korea · 98th, Global</b> <span class="org">· Python Alphas Competition — WorldQuant BRAIN</span>
+          <p>Custom Python alpha signals with out-of-sample evaluation on the BRAIN platform.</p></div>
+        <div class="when">2026</div>
+      </div>
+      <div class="xp">
+        <div class="what"><b>Paper Presentation Award — Honorable Mention</b> <span class="org">· KDISS</span>
+          <p>For MFMF: USD/KRW direction forecasting via image, text &amp; time-series fusion.</p></div>
+        <div class="when">2026</div>
+      </div>
+      <div class="xp">
+        <div class="what"><b>29th, Overseas League</b> <span class="org">· 13th Collegiate Mock Investment Competition — Korea Investment &amp; Securities</span>
+          <p>Repeated live-market practice: also 65th (domestic) &amp; 70th (overseas) leagues
+          at Kiwoom Securities&rsquo; 35th competition.</p></div>
+        <div class="when">2024 — 25</div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ————— education ————— -->
+  <section class="row" id="education">
+    <h2 class="rail">Education</h2>
+    <div>
+      <div class="xp">
+        <div class="what"><b>M.S., Data Science</b> <span class="org">· Jeju National University</span></div>
+        <div class="when">2026 —</div>
+      </div>
+      <div class="xp">
+        <div class="what"><b>B.S., Data Science</b> <span class="org">· Jeju National University</span></div>
+        <div class="when">2024 — 26</div>
+      </div>
+      <div class="xp">
+        <div class="what"><b>Undergraduate study, Intelligent System Engineering</b> <span class="org">· Cheju Halla University</span></div>
+        <div class="when">2022 — 24</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ————— toolkit ————— -->
+  <section class="row" id="toolkit">
+    <h2 class="rail">Toolkit</h2>
+    <ul class="kit">
+      <li><b>Python</b> <span>— NumPy · pandas · statsmodels</span></li>
+      <li><b>PyTorch</b> <span>— sequence &amp; multimodal models</span></li>
+      <li><b>Hugging Face</b> <span>— Transformers · ViT</span></li>
+      <li><b>R</b> <span>— statistical modeling</span></li>
+      <!-- ✏️ optional: <li><b>Certifications</b> <span>— name · name</span></li> -->
+    </ul>
+  </section>
+
+  <!-- ————— contact ————— -->
+  <section class="row contact" id="contact">
+    <h2 class="rail">Contact</h2>
+    <div>
+      <p class="credo">I’m not smarter than anyone else — I just want to be good at this.
+      So I don’t take the road everyone takes: I look for the right one,
+      and I walk it harder, and faster.</p>
+      <p class="links">
+        <a href="mailto:hongrizon@stu.jejunu.ac.kr">hongrizon@stu.jejunu.ac.kr</a>
+        <a href="https://github.com/HongRizon" rel="me noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/seungbin-hong-224a8b316" rel="me noopener">LinkedIn</a>
+        <a href="https://scholar.google.com/citations?user=oG6zMokAAAAJ" rel="me noopener">Scholar</a>
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="colo">
+  <span>© <span id="year">2026</span> SeungBin Hong</span>
+  <span class="sig">Typeset in Newsreader &amp; IBM Plex Mono — one file, no frameworks, no trackers · prints as a CV.</span>
+</footer>
+
+</div>
+
+<script>
+(function () {
+'use strict';
+
+var $ = function (id) { return document.getElementById(id); };
+var reducedMQ = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
+var darkMQ    = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)')    : null;
+function reduced() { return !!(reducedMQ && reducedMQ.matches); }
+
+/* fold long lists: show three, disclose the rest (print always shows all) */
+(function fold() {
+  var els = document.querySelectorAll('[data-fold]');
+  Array.prototype.forEach.call(els, function (el) {
+    var limit = parseInt(el.getAttribute('data-fold'), 10) || 3;
+    var rows = Array.prototype.slice.call(el.children);
+    if (rows.length <= limit) return;
+    var extra = rows.slice(limit);
+    extra.forEach(function (r) { r.classList.add('clip'); });
+    var btn = document.createElement('button');
+    var more = '+ ' + extra.length + ' more', less = '− fewer';
+    btn.type = 'button'; btn.className = 'fold-btn';
+    btn.textContent = more; btn.setAttribute('aria-expanded', 'false');
+    btn.addEventListener('click', function () {
+      var open = btn.getAttribute('aria-expanded') === 'true';
+      extra.forEach(function (r) { r.classList.toggle('clip', open); });
+      btn.setAttribute('aria-expanded', String(!open));
+      btn.textContent = open ? more : less;
+    });
+    if (el.tagName === 'OL') {
+      var li = document.createElement('li');
+      li.className = 'fold-li'; li.appendChild(btn); el.appendChild(li);
+    } else { el.appendChild(btn); }
+  });
+})();
+
+/* footer year */
+var y = $('year'); if (y) y.textContent = String(new Date().getFullYear());
+
+/* ═══════════════════ Fig. 1 — the forecast engine ═══════════════════
+   Model:  S_{t+1} = S_t · exp((μ − σ²/2) + σ·Z),  Z ~ N(0,1)
+           with occasional volatility-regime switches and rare jumps.
+   Cone:   closed-form lognormal quantiles at horizon h:
+           Q_p(h) = S · exp((μ − σ²/2)·h + z_p·σ·√h)
+   The cone is recomputed every frame from the live pen price,
+   so the forecast literally re-aims as reality unfolds.            */
+(function engine() {
+  var canvas = $('forecast-canvas');
+  if (!canvas || !canvas.getContext) return;
+  var ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  /* — parameters — */
+  var HIST = 210;        // realized steps shown ("days")
+  var HOR = 80;          // forecast horizon steps
+  var TICK = 1600;       // ms per simulated step
+  var THREADS = 9;       // Monte Carlo sample paths for texture
+  var MU = 0.00042;      // daily drift  (≈ +10.6%/yr)
+  var SBASE = 0.013;     // base daily vol (≈ 20.6%/yr)
+  var Z = { q05: -1.6449, q25: -0.67449, q50: 0, q75: 0.67449, q95: 1.6449 };
+
+  /* — ink: colours are read from the stylesheet, so the figure
+       re-inks itself for light, dark, and print. — */
+  var ink = [34,30,21], accent = [140,47,27], paper = [246,242,233], faint = [111,104,88];
+  function parseCol(s) {
+    s = (s || '').trim();
+    if (s[0] === '#') {
+      if (s.length === 4) s = '#' + s[1] + s[1] + s[2] + s[2] + s[3] + s[3];
+      return [parseInt(s.slice(1, 3), 16), parseInt(s.slice(3, 5), 16), parseInt(s.slice(5, 7), 16)];
+    }
+    var m = s.match(/(\d+)[,\s]+(\d+)[,\s]+(\d+)/);
+    return m ? [+m[1], +m[2], +m[3]] : null;
+  }
+  function readInk() {
+    try {
+      var cs = getComputedStyle(canvas);
+      ink    = parseCol(cs.getPropertyValue('--ink'))    || ink;
+      accent = parseCol(cs.getPropertyValue('--accent')) || accent;
+      paper  = parseCol(cs.getPropertyValue('--paper'))  || paper;
+      faint  = parseCol(cs.getPropertyValue('--faint'))  || faint;
+    } catch (e) { /* keep defaults */ }
+  }
+  function col(c, a) { return 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + a + ')'; }
+
+  /* — deterministic RNG (mulberry32): every seed is reproducible — */
+  var seed = 0, rand = Math.random, sigma = SBASE;
+  function mulberry32(a) {
+    return function () {
+      a |= 0; a = (a + 0x6D2B79F5) | 0;
+      var t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  function gauss() { // Box–Muller
+    var u = 0, v = 0;
+    while (!u) u = rand();
+    while (!v) v = rand();
+    return Math.sqrt(-2 * Math.log(u)) * Math.cos(6.283185307179586 * v);
+  }
+  function step(p) {
+    if (rand() < 0.012) sigma = SBASE * (0.55 + 1.5 * rand());   // regime switch
+    var r = (MU - 0.5 * sigma * sigma) + sigma * gauss();
+    if (rand() < 0.005) r += (rand() < 0.5 ? -1 : 1) * sigma * (4 + 5 * rand()); // jump
+    return p * Math.exp(r);
+  }
+  function quant(S, z, h) {
+    return S * Math.exp((MU - 0.5 * sigma * sigma) * h + z * sigma * Math.sqrt(h));
+  }
+
+  /* — world state — */
+  var prices = [], pLast = 100, pNext = 100, threads = [];
+  var lastTick = 0, revealStart = 0, revealed = false;
+  var yLo = NaN, yHi = NaN;
+  var pointer = null;
+  var running = false, inView = true, raf = 0;
+
+  function makeThreads(S) {
+    threads = [];
+    for (var k = 0; k < THREADS; k++) {
+      var a = new Float64Array(HOR + 1); a[0] = S;
+      var p = S;
+      for (var h = 1; h <= HOR; h++) { p = p * Math.exp((MU - 0.5 * sigma * sigma) + sigma * gauss()); a[h] = p; }
+      threads.push(a);
+    }
+  }
+  function updateTelemetry() {
+    var s = $('tel-spot'), v = $('tel-vol'), d = $('tel-drift');
+    if (s) s.textContent = pLast.toFixed(2);
+    if (v) v.textContent = (sigma * Math.sqrt(252) * 100).toFixed(1) + '%';
+    if (d) d.textContent = '+' + (MU * 252 * 100).toFixed(1) + '%';
+  }
+  function reset(newSeed) {
+    seed = (newSeed == null ? (Math.random() * 4294967296) >>> 0 : newSeed >>> 0);
+    rand = mulberry32(seed);
+    sigma = SBASE * (0.75 + 0.6 * rand());
+    var p = 100; prices = [p];
+    for (var i = 1; i < HIST; i++) { p = step(p); prices.push(p); }
+    pLast = prices[prices.length - 1];
+    pNext = step(pLast);
+    makeThreads(pLast);
+    var now = performance.now();
+    lastTick = now; revealStart = now; revealed = false;
+    yLo = NaN; yHi = NaN;
+    var se = $('seed-value');
+    if (se) se.textContent = '0x' + seed.toString(16).toUpperCase().padStart(8, '0');
+    updateTelemetry();
+  }
+
+  /* — layout & DPR — */
+  var W = 0, H = 0, dpr = 1, mL = 8, mR = 70, mT = 16, mB = 26, dx = 0, xNow = 0;
+  function resize() {
+    var r = canvas.getBoundingClientRect();
+    if (r.width < 10) return;
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = r.width; H = r.height;
+    canvas.width = Math.round(W * dpr);
+    canvas.height = Math.round(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    mR = W < 560 ? 58 : 70;
+    dx = (W - mL - mR) / (HIST - 1 + HOR);
+    xNow = mL + dx * (HIST - 1);
+    readInk();
+    if (reduced() || !running) drawStatic();   /* resizing wipes the bitmap; repaint if the loop won't */
+  }
+
+  /* — easing — */
+  function crisp(v) { return (Math.round(v * dpr - 0.5) + 0.5) / dpr; } /* hairlines on the pixel grid */
+  function easeInOut(t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+  function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
+
+  /* — drawing: the manners of a printed chart — */
+  function niceStep(raw) {
+    var mag = Math.pow(10, Math.floor(Math.log(raw) / Math.LN10));
+    var n = raw / mag;
+    return (n < 1.5 ? 1 : n < 3.5 ? 2 : n < 7.5 ? 5 : 10) * mag;
+  }
+  function draw(fLin, rv, fPen, tNow) {
+    ctx.clearRect(0, 0, W, H);
+    var penP = pLast + (pNext - pLast) * fPen;
+
+    /* scale (smoothed so the axes breathe, not jump) */
+    var lo = Infinity, hi = -Infinity, i, h;
+    for (i = 0; i < prices.length; i++) { var v = prices[i]; if (v < lo) lo = v; if (v > hi) hi = v; }
+    var qlo = quant(penP, Z.q05, HOR), qhi = quant(penP, Z.q95, HOR);
+    if (qlo < lo) lo = qlo; if (qhi > hi) hi = qhi;
+    var pad = (hi - lo) * 0.1 || 1; lo -= pad; hi += pad;
+    if (isNaN(yLo)) { yLo = lo; yHi = hi; }
+    else { yLo += (lo - yLo) * 0.05; yHi += (hi - yHi) * 0.05; }
+    var plotH = H - mT - mB;
+    function Y(p) { return mT + plotH * (1 - (p - yLo) / (yHi - yLo)); }
+    function XH(idx) { return mL + dx * (idx - fLin); }
+    function XF(hh) { return xNow + dx * hh; }
+
+    /* horizontal gridlines + right-hand price labels */
+    var stepv = niceStep((yHi - yLo) / 4);
+    var start = Math.ceil(yLo / stepv) * stepv;
+    ctx.font = '9.5px "IBM Plex Mono", monospace';
+    ctx.textBaseline = 'middle';
+    for (var gv = start; gv < yHi; gv += stepv) {
+      var gy = crisp(Y(gv));
+      ctx.strokeStyle = col(ink, .10);
+      ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(mL, gy); ctx.lineTo(W - mR, gy); ctx.stroke();
+      ctx.fillStyle = col(faint, .85);
+      ctx.textAlign = 'right';
+      ctx.fillText(gv >= 100 ? gv.toFixed(1) : gv.toFixed(2), W - 2, gy);
+    }
+    /* axis time labels */
+    ctx.fillStyle = col(faint, .8);
+    ctx.textAlign = 'left';  ctx.fillText('−' + (HIST - 1) + 'd', mL, H - 9);
+    ctx.textAlign = 'right'; ctx.fillText('+' + HOR + 'd', W - mR, H - 9);
+
+    /* the present: a dotted rule, as a margin note in time */
+    ctx.strokeStyle = col(ink, .38);
+    ctx.lineWidth = 1;
+    ctx.setLineDash([1, 3]);
+    var xnc = crisp(xNow);
+    ctx.beginPath(); ctx.moveTo(xnc, mT); ctx.lineTo(xnc, H - mB); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = col(faint, .9);
+    ctx.textAlign = 'left';
+    ctx.fillText('now', xNow + 5, mT + 4);
+
+    /* realized path — plain ink, clipped for the initial reveal */
+    var clipR = mL + (xNow - mL) * rv;
+    ctx.save();
+    ctx.beginPath(); ctx.rect(mL - 1, 0, clipR - mL + 2, H); ctx.clip();
+    ctx.beginPath();
+    ctx.moveTo(XH(0), Y(prices[0]));
+    for (i = 1; i < prices.length; i++) ctx.lineTo(XH(i), Y(prices[i]));
+    ctx.lineTo(xNow, Y(penP));
+    ctx.strokeStyle = col(ink, .92); ctx.lineWidth = 1.4; ctx.lineJoin = 'round'; ctx.stroke();
+    ctx.restore();
+
+    /* forecast cone (fades in at the end of the reveal) */
+    var fa = Math.max(0, Math.min(1, (rv - 0.8) / 0.2));
+    if (fa > 0) {
+      var a05 = [], a25 = [], a50 = [], a75 = [], a95 = [];
+      for (h = 0; h <= HOR; h++) {
+        a05.push(quant(penP, Z.q05, h)); a25.push(quant(penP, Z.q25, h));
+        a50.push(quant(penP, Z.q50, h)); a75.push(quant(penP, Z.q75, h));
+        a95.push(quant(penP, Z.q95, h));
+      }
+      function band(top, bot, alpha) {
+        ctx.beginPath();
+        ctx.moveTo(XF(0), Y(top[0]));
+        for (var j = 1; j <= HOR; j++) ctx.lineTo(XF(j), Y(top[j]));
+        for (j = HOR; j >= 0; j--) ctx.lineTo(XF(j), Y(bot[j]));
+        ctx.closePath(); ctx.fillStyle = col(accent, alpha * fa); ctx.fill();
+      }
+      band(a95, a05, 0.07);
+      band(a75, a25, 0.13);
+
+      /* Monte Carlo threads, ratio-anchored to the live pen */
+      ctx.lineWidth = 1;
+      for (var k = 0; k < threads.length; k++) {
+        var t = threads[k], ratio = penP / t[0];
+        ctx.beginPath(); ctx.moveTo(XF(0), Y(t[0] * ratio));
+        for (h = 1; h <= HOR; h++) ctx.lineTo(XF(h), Y(t[h] * ratio));
+        ctx.strokeStyle = col(accent, 0.15 * fa);
+        ctx.stroke();
+      }
+      /* median */
+      ctx.beginPath(); ctx.moveTo(XF(0), Y(a50[0]));
+      for (h = 1; h <= HOR; h++) ctx.lineTo(XF(h), Y(a50[h]));
+      ctx.strokeStyle = col(accent, 0.9 * fa);
+      ctx.lineWidth = 1.4; ctx.stroke();
+
+      /* quantile end labels */
+      ctx.font = '8.5px "IBM Plex Mono", monospace';
+      ctx.fillStyle = col(accent, 0.75 * fa);
+      ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+      ctx.fillText('P95', XF(HOR) + 5, Y(a95[HOR]));
+      ctx.fillText('P50', XF(HOR) + 5, Y(a50[HOR]));
+      ctx.fillText('P05', XF(HOR) + 5, Y(a05[HOR]));
+      ctx.font = '9.5px "IBM Plex Mono", monospace';
+    }
+
+    /* the pen: the present moment */
+    var py = Y(penP);
+    var pulse = 0.5 + 0.5 * Math.sin(tNow / 500);
+    if (fa > 0) {
+      ctx.beginPath(); ctx.arc(xNow, py, 5.5 + 2.2 * pulse, 0, 6.2832);
+      ctx.strokeStyle = col(accent, 0.3 * fa);
+      ctx.lineWidth = 1; ctx.stroke();
+    }
+    ctx.beginPath(); ctx.arc(xNow, py, 4.4, 0, 6.2832);
+    ctx.fillStyle = col(paper, 1); ctx.fill();   /* knockout: lift the dot off the ink */
+    ctx.beginPath(); ctx.arc(xNow, py, 2.8, 0, 6.2832);
+    ctx.fillStyle = col(accent, 1); ctx.fill();
+
+    /* crosshair — a reading rule */
+    if (pointer && pointer.x > mL && pointer.x < W - mR && pointer.y > mT && pointer.y < H - mB) {
+      var cx = pointer.x, val, tag;
+      if (cx <= xNow) {
+        var fi = (cx - mL) / dx + fLin;
+        var i0 = Math.max(0, Math.min(prices.length - 2, Math.floor(fi)));
+        var fr = Math.max(0, Math.min(1, fi - i0));
+        val = prices[i0] + (prices[i0 + 1] - prices[i0]) * fr;
+        tag = '−' + Math.max(0, Math.round(HIST - 1 - fi)) + 'd';
+      } else {
+        var hh = (cx - xNow) / dx;
+        val = quant(penP, 0, hh);
+        tag = '+' + Math.round(hh) + 'd · P50';
+      }
+      var vy = Y(val), cxc = crisp(cx);
+      ctx.strokeStyle = col(ink, .3);
+      ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(cxc, mT); ctx.lineTo(cxc, H - mB); ctx.stroke();
+      ctx.beginPath(); ctx.arc(cx, vy, 4.2, 0, 6.2832);
+      ctx.fillStyle = col(paper, 1); ctx.fill();
+      ctx.beginPath(); ctx.arc(cx, vy, 2.8, 0, 6.2832);
+      ctx.fillStyle = cx <= xNow ? col(ink, .95) : col(accent, 1); ctx.fill();
+
+      var label = val.toFixed(2) + '  ' + tag;
+      var tw = ctx.measureText(label).width;
+      var bx = Math.min(Math.max(cx + 10, mL), W - mR - tw - 14);
+      var by = Math.max(mT + 3, vy - 25);
+      ctx.fillStyle = col(paper, .96);
+      ctx.strokeStyle = col(ink, .28);
+      ctx.beginPath(); ctx.rect(bx, by, tw + 14, 19); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = col(ink, 1); ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+      ctx.fillText(label, bx + 7, by + 10);
+    }
+  }
+  function drawStatic() {
+    if (!W) return;
+    yLo = NaN; yHi = NaN;
+    draw(0, 1, 0, 0);
+  }
+
+  /* — animation loop — */
+  function frame(now) {
+    raf = 0;
+    if (!running) return;
+    if (now - lastTick >= TICK) {
+      if (now - lastTick >= 2 * TICK) lastTick = now - TICK; // clamp after tab sleep
+      prices.push(pNext); prices.shift();
+      pLast = pNext;
+      pNext = step(pLast);
+      makeThreads(pLast);
+      lastTick += TICK;
+      updateTelemetry();
+    }
+    var f = (now - lastTick) / TICK;
+    if (f < 0) f = 0; if (f > 1) f = 1;
+    var rv = revealed ? 1 : Math.min(1, (now - revealStart) / 2200);
+    if (rv >= 1) revealed = true;
+    draw(f, easeOut(rv), easeInOut(f), now);
+    raf = requestAnimationFrame(frame);
+  }
+  function start() {
+    if (reduced()) { drawStatic(); return; }
+    if (running) return;
+    running = true;
+    lastTick = performance.now();
+    if (revealed) revealStart = lastTick - 9999;
+    raf = requestAnimationFrame(frame);
+  }
+  function stop() {
+    running = false;
+    if (raf) { cancelAnimationFrame(raf); raf = 0; }
+  }
+  function maybeStart() {
+    if (!document.hidden && inView) start(); else stop();
+  }
+
+  /* — interaction — */
+  canvas.addEventListener('pointermove', function (e) {
+    var r = canvas.getBoundingClientRect();
+    pointer = { x: e.clientX - r.left, y: e.clientY - r.top };
+    if (reduced()) drawStatic();
+  });
+  canvas.addEventListener('pointerleave', function () {
+    pointer = null;
+    if (reduced()) drawStatic();
+  });
+  var resim = $('resim');
+  if (resim) resim.addEventListener('click', function () {
+    reset();
+    if (reduced()) drawStatic(); else { stop(); start(); }
+  });
+
+  /* — lifecycle: pause when hidden or off-screen; re-ink on scheme change — */
+  var seen = false;
+  document.addEventListener('visibilitychange', maybeStart);
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) {
+      inView = entries[0].isIntersecting;
+      if (inView && !seen) { seen = true; if (!revealed) revealStart = performance.now(); }
+      maybeStart();
+    }, { threshold: 0.02 }).observe(canvas);
+  } else { seen = true; }
+  if ('ResizeObserver' in window) {
+    new ResizeObserver(function () { resize(); }).observe(canvas);
+  } else {
+    window.addEventListener('resize', resize);
+  }
+  if (reducedMQ && reducedMQ.addEventListener) {
+    reducedMQ.addEventListener('change', function () {
+      if (reduced()) { stop(); drawStatic(); } else { maybeStart(); }
+    });
+  }
+  function onScheme() { readInk(); if (reduced() || !running) drawStatic(); }
+  if (darkMQ) {
+    if (darkMQ.addEventListener) darkMQ.addEventListener('change', onScheme);
+    else if (darkMQ.addListener) darkMQ.addListener(onScheme);
+  }
+  window.addEventListener('beforeprint', function () { readInk(); drawStatic(); });
+  window.addEventListener('afterprint', function () { readInk(); if (!reduced()) maybeStart(); else drawStatic(); });
+
+  /* — go — */
+  resize();
+  reset();
+  drawStatic();               /* never show a blank figure, even while paused */
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () {
+    if (reduced() || !running) drawStatic();
+  });
+  if (!reduced()) maybeStart();
+})();
+
+})();
+</script>
+</body>
+</html>
