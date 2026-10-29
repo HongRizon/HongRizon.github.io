@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SeungBin Hong | Quantitative researcher</title>
+<meta name="description" content="SeungBin Hong (홍승빈), quantitative researcher focused on financial machine learning and decision-making, with an interest in efficient AI.">
+<meta name="author" content="SeungBin Hong">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://hongrizon.github.io/">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#fafaf8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141a20" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://hongrizon.github.io/">
+<meta property="og:title" content="SeungBin Hong | Quantitative researcher">
+<meta property="og:description" content="Financial machine learning. Decision-making under uncertainty. Research by SeungBin Hong.">
+<meta property="og:image" content="https://hongrizon.github.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="SeungBin Hong, quantitative researcher.">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23fff'/%3E%3Cpath d='M30 34L58 16V34Z' fill='%23aa454a'/%3E%3Cpath d='M30 34H58V52Z' fill='%232b69a6'/%3E%3Cpath d='M6 42L15 30L22 37L30 34' stroke='%23000' stroke-width='4' fill='none' stroke-linejoin='round' stroke-linecap='round'/%3E%3Ccircle cx='30' cy='34' r='4.5' fill='%23000'/%3E%3C/svg%3E">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "SeungBin Hong",
+  "alternateName": "홍승빈",
+  "jobTitle": "Quantitative researcher",
+  "url": "https://hongrizon.github.io/",
+  "email": "mailto:hongrizon@stu.jejunu.ac.kr",
+  "affiliation": {
+    "@type": "CollegeOrUniversity",
+    "name": "Jeju National University"
+  },
+  "sameAs": [
+    "https://scholar.google.com/citations?user=oG6zMokAAAAJ",
+    "https://www.linkedin.com/in/seungbin-hong-224a8b316",
+    "https://github.com/HongRizon"
+  ]
+}
+</script>
+<script>/* Restore an explicit theme choice before first paint; otherwise follow the system. */
+try{const t=localStorage.getItem('sbh-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(_){}
+</script>
+<style>
+/* ------------------------------------------------------------------
+   A financial research note, set in type.
+   Three voices: serif for the thesis and section titles, sans for
+   language and controls, monospace for data only (dates, figures, axes).
+   Rules encode hierarchy: an ink rule opens a section, a light rule
+   separates items. No imported fonts, icon kits, libraries or trackers.
+   ------------------------------------------------------------------ */
+:root{
+ --paper:#fafaf8;--surface:#f1f3f3;--ink:#1f2933;--muted:#5a6670;--line:#d6dcdf;--strong:#8a97a0;
+ --accent:#27506f;--up:#aa454a;--down:#2b69a6;--band-a:.12;--band-b:.19;
+ --page:1160px;--rail:168px;--gutter:clamp(20px,4vw,56px);--header:72px;
+ --sans:-apple-system,BlinkMacSystemFont,"Segoe UI Variable Text","Segoe UI",Roboto,"Helvetica Neue",Arial,"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;
+ --display:-apple-system,BlinkMacSystemFont,"Segoe UI Variable Display","Segoe UI",Roboto,"Helvetica Neue",Arial,"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;
+ --serif:"Iowan Old Style","Palatino Linotype",Palatino,Charter,Georgia,"Noto Serif","Times New Roman",serif;
+ --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,"Cascadia Mono","DejaVu Sans Mono","Liberation Mono",monospace;
+ color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+ --paper:#141a20;--surface:#1b242d;--ink:#e8edf0;--muted:#a9b5be;--line:#334049;--strong:#7f919f;
+ --accent:#a9cbe6;--up:#d9707a;--down:#4393d8;--band-a:.18;--band-b:.28;color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+ --paper:#141a20;--surface:#1b242d;--ink:#e8edf0;--muted:#a9b5be;--line:#334049;--strong:#7f919f;
+ --accent:#a9cbe6;--up:#d9707a;--down:#4393d8;--band-a:.18;--band-b:.28;color-scheme:dark;
+}
+@media (prefers-contrast:more){
+ :root{--muted:#3b464f;--line:#9ea9b0;--strong:#59676f}
+ :root[data-theme="dark"]{--muted:#c8d1d7;--line:#5c6b76;--strong:#9fb0bd}
+}
+@media (prefers-contrast:more) and (prefers-color-scheme:dark){
+ :root:not([data-theme="light"]){--muted:#c8d1d7;--line:#5c6b76;--strong:#9fb0bd}
+}
+
+/* Base */
+*,*::before,*::after{box-sizing:border-box}
+html{background:var(--paper);scroll-behavior:smooth;scroll-padding-top:calc(var(--header) + 24px);-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.65 var(--sans);-webkit-font-smoothing:antialiased;padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
+h1,h2,h3,h4,p,figure,dl,dd,ul,ol,fieldset{margin:0}
+ul,ol{padding:0;list-style:none}
+fieldset{border:0;padding:0;min-width:0}
+legend{padding:0}
+h1,h2,h3,h4{font-weight:500;text-wrap:balance}
+p{text-wrap:pretty}
+time{white-space:nowrap}
+a{color:inherit;text-decoration-thickness:1px;text-underline-offset:.22em;text-decoration-color:var(--strong)}
+a:hover{color:var(--accent);text-decoration-color:currentColor}
+button,input{font:inherit;color:inherit}
+button{border:0;background:none;padding:0;cursor:pointer}
+button:disabled{cursor:default;opacity:.45}
+summary{cursor:pointer}
+a,button,input,summary{-webkit-tap-highlight-color:transparent}
+:where(a,button,input,summary,[tabindex]):focus-visible{outline:2px solid var(--accent);outline-offset:4px}
+[hidden]{display:none!important}
+::selection{background:var(--ink);color:var(--paper)}
+img,svg,canvas{max-width:100%}
+main,section,article,div,nav{min-width:0}
+.wrap{width:calc(100% - var(--gutter)*2);max-width:var(--page);margin-inline:auto}
+.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+.skip{position:fixed;z-index:100;top:10px;left:12px;transform:translateY(-180%);background:var(--ink);color:var(--paper);padding:12px 18px;text-decoration:none}
+.skip:focus{transform:none}
+.data{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.ext{font-size:.85em;line-height:1;opacity:.75}
+.js-only{display:none!important}
+.js .js-only{display:inline-flex!important}
+.print-only{display:none}
+@media (prefers-reduced-motion:no-preference){
+ a,button,.segmented span{transition:color .15s,background-color .15s,border-color .15s}
+}
+
+/* Header */
+.site-header{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;gap:28px;min-height:var(--header)}
+.wordmark{display:inline-flex;align-items:center;gap:12px;min-height:44px;font-size:14px;font-weight:600;letter-spacing:-.02em;text-decoration:none;white-space:nowrap}
+.wordmark:hover{color:var(--ink)}
+.brand-mark{width:26px;height:26px;flex:none}
+.nav-links{display:flex;flex-wrap:wrap;align-items:center;gap:24px;margin-left:auto}
+.nav-links a{position:relative;display:inline-flex;align-items:center;min-height:44px;font-size:13px;color:var(--muted);text-decoration:none}
+.nav-links a:hover,.nav-links a[aria-current]{color:var(--ink)}
+.nav-links a[aria-current]::after{content:"";position:absolute;left:0;right:0;bottom:7px;height:1px;background:currentColor}
+.theme-control{border-left:1px solid var(--line);padding-left:12px}
+.js .theme-control.js-only{display:block!important}
+
+/* Segmented control: a row of radios that reads like a small nav */
+.segmented{display:inline-flex;align-items:center;vertical-align:middle}
+.segmented label{position:relative;display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 8px;cursor:pointer}
+.segmented input{position:absolute;inset:0;z-index:1;width:100%;height:100%;margin:0;opacity:0;cursor:pointer}
+.segmented input:disabled{cursor:default}
+.segmented span{position:relative;font-size:12px;line-height:1;padding:4px 0;color:var(--muted);white-space:nowrap}
+.segmented label:hover span{color:var(--ink)}
+.segmented input:checked+span{color:var(--ink)}
+.segmented input:checked+span::after{content:"";position:absolute;left:0;right:0;bottom:-3px;height:1px;background:currentColor}
+.segmented input:focus-visible+span{outline:2px solid var(--accent);outline-offset:4px}
+.segmented input:disabled+span{opacity:.45}
+.seg-label{font-size:12px;color:var(--muted);margin-right:2px}
+
+/* Hero */
+.hero{padding:clamp(40px,5vw,72px) 0 28px}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1fr) 248px;gap:72px;align-items:end}
+.role{font-size:14px;color:var(--muted);margin-bottom:16px}
+h1{font-family:var(--display);font-size:clamp(2.125rem,1.4rem + 3.3vw,4.25rem);line-height:1.05;letter-spacing:-.035em;margin-bottom:24px}
+.name-en{display:inline-block}
+.name-ko{display:inline-block;font:400 clamp(.95rem,.8rem + .5vw,1.125rem)/1.4 var(--sans);letter-spacing:-.02em;color:var(--muted)}
+.hero-thesis{font:clamp(1.375rem,1.05rem + 1.1vw,2rem)/1.38 var(--serif);letter-spacing:-.012em;max-width:740px;margin-bottom:24px}
+.hero-copy{max-width:60ch;font-size:15px;line-height:1.8;color:var(--muted)}
+.hero-copy strong{font-weight:inherit;color:var(--ink)}
+.hero-actions{display:flex;align-items:center;flex-wrap:wrap;gap:8px 24px;margin-top:28px}
+.primary-link{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:10px 20px;background:var(--ink);color:var(--paper);border:1px solid var(--ink);text-decoration:none;font-size:13px;font-weight:500;letter-spacing:.01em}
+.primary-link:hover{background:var(--paper);color:var(--ink)}
+.text-link{display:inline-flex;align-items:center;gap:6px;min-height:44px;font-size:13px;text-decoration:none}
+.text-link:hover{text-decoration:underline}
+.hero-aside{border-top:1px solid var(--ink);padding-top:16px}
+.aside-title{font-size:12px;font-weight:500;color:var(--muted);margin-bottom:12px}
+.facts li{border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:12px}
+.facts li:last-child{border:0;margin:0;padding:0}
+.facts strong{display:block;font-size:14px;font-weight:500;line-height:1.45}
+.facts span{display:block;font-size:12px;line-height:1.6;color:var(--muted);margin-top:4px}
+.identity-strip{display:flex;justify-content:space-between;align-items:center;gap:24px;border-top:1px solid var(--line);margin-top:40px;padding-top:12px;font-size:12px;color:var(--muted)}
+.social-links{display:flex;flex-wrap:wrap;align-items:center;gap:4px 24px}
+.social-links a{display:inline-flex;align-items:center;gap:4px;min-height:44px;font-size:13px;text-decoration:none}
+.social-links a:hover{text-decoration:underline}
+
+/* Research figure: the one place the page spends its boldness */
+.work{padding:36px 0 64px;border-top:1px solid var(--ink)}
+.work-heading{display:flex;justify-content:space-between;align-items:end;gap:32px;margin-bottom:28px}
+.work-heading h2{font:clamp(1.75rem,1.2rem + 1.5vw,2.5rem)/1.2 var(--serif);letter-spacing:-.02em}
+.work-heading p{max-width:30ch;color:var(--muted);font-size:13px;line-height:1.7}
+.figure-header{display:flex;justify-content:space-between;align-items:baseline;gap:20px;padding:16px 0;border-top:1px solid var(--line)}
+.figure-header h3{font-size:15px;letter-spacing:-.01em}
+.snapshot{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.metrics{display:grid;grid-template-columns:1fr 1fr 1.25fr 1fr;gap:28px;padding:16px 0 24px;border-top:1px solid var(--line)}
+.metric{border-right:1px solid var(--line);padding-right:24px;min-width:0}
+.metric:last-child{border-right:0;padding-right:0}
+.metric dt{font-size:12px;line-height:1.5;color:var(--muted);margin-bottom:8px}
+.metric dd{font-size:clamp(1.375rem,1rem + 1vw,1.875rem);line-height:1.25;letter-spacing:-.02em;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.metric .unit{display:block;font-size:12px;letter-spacing:0;line-height:1.5;color:var(--muted);margin-top:4px}
+.metric:first-child dd{font-size:clamp(1.15rem,.9rem + .7vw,1.5rem);letter-spacing:-.01em}
+.figure-meta{display:flex;justify-content:space-between;align-items:baseline;gap:20px;min-height:32px;font-size:12px;color:var(--muted)}
+#fx-hover{flex:1;min-width:0;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}
+#fx-hover.is-live{color:var(--ink)}
+.plot{position:relative;height:clamp(280px,31vw,350px);touch-action:pan-y;cursor:crosshair}
+.plot canvas{position:absolute;inset:0;width:100%;height:100%;visibility:hidden}
+.chart-ready .plot canvas{visibility:visible}
+.chart-ready .fallback{visibility:hidden}
+.fallback{position:absolute;inset:0}
+/* The static figure shares the canvas geometry: 2px left, 57px right, 13px top, 31px bottom. */
+.static-frame{position:absolute;left:2px;right:57px;top:13px;bottom:31px}
+.static-frame>svg{width:100%;height:100%;display:block}
+.static-y{position:absolute;left:calc(100% + 9px);transform:translateY(-50%);font:12px/1.3 var(--sans);color:var(--muted);white-space:nowrap}
+.static-x{position:absolute;bottom:-24px;margin-left:3px;font:12px/1.3 var(--sans);color:var(--muted);white-space:nowrap}
+.static-x::before{content:"";position:absolute;left:-3px;top:-7px;height:5px;border-left:1px solid var(--line)}
+.legend{display:flex;flex-wrap:wrap;align-items:center;gap:8px 22px;padding:12px 0 16px;color:var(--muted);font-size:12px}
+.legend>span{display:inline-flex;align-items:center;gap:8px}
+.swatch{display:inline-block;width:20px;height:0;border-top:2px solid var(--ink);flex:none}
+.swatch.future{border-top:2px dashed var(--muted)}
+.swatch.band{display:inline-flex;flex-direction:column;width:20px;height:12px;border:0}
+.swatch.band span{display:block;flex:1}
+.swatch.band .upper{background:var(--up);opacity:.3}
+.swatch.band .lower{background:var(--down);opacity:.3}
+.swatch.dot{width:8px;height:8px;border:1.5px solid var(--ink);border-radius:50%;background:var(--paper)}
+.chart-controls{border-top:1px solid var(--line)}
+.control-head{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;min-height:56px}
+.control-head>label{font-size:12px}
+.push{margin-left:auto}
+.control-button{min-width:44px;min-height:44px;display:inline-flex;align-items:center;justify-content:center;padding:8px;font-size:16px;border:1px solid transparent}
+.control-button:hover:not(:disabled){border-color:var(--strong);background:var(--surface)}
+.control-button.text{font-size:12px;padding:8px 10px}
+.range-row{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;gap:12px;align-items:center}
+input[type="range"]{-webkit-appearance:none;appearance:none;display:block;width:100%;height:44px;margin:0;background:transparent;cursor:ew-resize}
+input[type="range"]:disabled{cursor:default;opacity:.5}
+input[type="range"]::-webkit-slider-runnable-track{height:2px;background:var(--line)}
+input[type="range"]::-moz-range-track{height:2px;background:var(--line)}
+input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;margin-top:-7px;border-radius:50%;background:var(--paper);border:2px solid var(--ink)}
+input[type="range"]::-moz-range-thumb{width:12px;height:12px;border-radius:50%;background:var(--paper);border:2px solid var(--ink)}
+input[type="range"]:focus-visible{outline:none}
+input[type="range"]:focus-visible::-webkit-slider-thumb{outline:2px solid var(--accent);outline-offset:3px}
+input[type="range"]:focus-visible::-moz-range-thumb{outline:2px solid var(--accent);outline-offset:3px}
+.control-caption{display:flex;justify-content:space-between;gap:20px;padding:0 56px 8px;color:var(--muted);font:11px/1.6 var(--mono)}
+.outcome{margin-top:16px;min-height:3.4em;padding-top:16px;border-top:1px solid var(--line);font-size:13px;line-height:1.65;color:var(--muted)}
+.outcome strong{color:var(--ink);font-weight:500}
+.chart-help{margin-top:8px;font-size:12px;color:var(--muted)}
+.figure-note{margin-top:20px;display:grid;grid-template-columns:1.15fr 1fr;gap:48px;font-size:13px;line-height:1.75;color:var(--muted)}
+.figure-note strong{color:var(--ink);font-weight:500}
+.disclosures{margin-top:24px;border-top:1px solid var(--ink)}
+details{border-bottom:1px solid var(--line)}
+summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:20px;min-height:52px;font-size:13px;padding:8px 0}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font-size:18px;line-height:1;color:var(--muted)}
+details[open]>summary::after{content:"−"}
+.details-content{padding:4px 0 24px;font-size:13px;color:var(--muted);line-height:1.8}
+.details-content p+p{margin-top:12px}
+.method-grid,.engineering{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+.method-grid h4,.engineering h4{margin:0 0 8px;font-size:13px;color:var(--ink)}
+.formula{padding:12px 14px;background:var(--surface);font:12px/1.9 var(--mono);overflow-wrap:anywhere;margin-top:12px}
+.table-scroll{max-height:360px;overflow:auto;border:1px solid var(--line);margin-top:14px}
+table{border-collapse:collapse;width:100%;font-size:12px;font-variant-numeric:tabular-nums}
+caption{text-align:left;padding:12px;line-height:1.7}
+th,td{text-align:right;padding:9px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+thead th{position:sticky;top:0;z-index:1;background:var(--surface);color:var(--ink);font-weight:500}
+tbody th{font-weight:400;color:var(--muted)}
+.downloads{display:flex;flex-wrap:wrap;gap:8px 28px;margin-top:12px}
+.widget-error,.noscript-note{font-size:13px;line-height:1.7;color:var(--muted);margin-top:16px}
+
+/* Reading sections share one rhythm: a title in the rail, the matter on the right */
+.content-section{padding:64px 0;border-top:1px solid var(--line)}
+.section-grid{display:grid;grid-template-columns:var(--rail) minmax(0,1fr);gap:56px}
+.section-rail h2{font:1.75rem/1.25 var(--serif);letter-spacing:-.015em}
+.section-lede{font-size:15px;line-height:1.8;color:var(--muted);max-width:66ch;margin-bottom:28px}
+.research-list{border-top:1px solid var(--ink);counter-reset:item}
+.research-item{display:grid;grid-template-columns:28px 208px minmax(0,1fr);gap:24px;padding:24px 0;border-bottom:1px solid var(--line);counter-increment:item}
+.research-item::before{content:counter(item,decimal-leading-zero);font:12px/1.7 var(--mono);color:var(--muted);padding-top:2px}
+.research-item h3{font-size:16px;line-height:1.45;letter-spacing:-.01em}
+.research-item p{font-size:14px;line-height:1.75;color:var(--muted)}
+.paper-list{border-top:1px solid var(--ink)}
+.paper{display:grid;grid-template-columns:48px minmax(0,1fr);gap:24px;padding:24px 0;border-bottom:1px solid var(--line)}
+.paper-year{font:12px/1.7 var(--mono);color:var(--muted);padding-top:3px}
+.paper h3{font-size:16px;line-height:1.5;letter-spacing:-.01em;margin-bottom:8px}
+.paper p{font-size:13px;line-height:1.75;color:var(--muted)}
+.record-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+.record-column>h3{border-top:1px solid var(--ink);padding-top:12px;font-size:14px;margin-bottom:24px}
+.entry{display:flex;flex-direction:column;gap:4px;padding-bottom:20px;margin-bottom:20px;border-bottom:1px solid var(--line)}
+.entry:last-child{margin-bottom:0}
+.entry b{display:block;font-size:15px;line-height:1.5;font-weight:500}
+.org{display:block;font-size:13px;line-height:1.7;color:var(--muted);margin-top:2px}
+.note{display:block;font-size:13px;line-height:1.7;color:var(--muted);margin-top:4px}
+.note+.note{margin-top:2px}
+.when{order:-1;font:11px/1.6 var(--mono);color:var(--muted)}
+.education-list{border-top:1px solid var(--ink)}
+.degree{display:grid;grid-template-columns:112px minmax(0,1fr) 176px;gap:24px;padding:24px 0;border-bottom:1px solid var(--line)}
+.degree .year{font:11px/1.7 var(--mono);color:var(--muted);padding-top:3px}
+.degree strong{font-size:15px;font-weight:500;line-height:1.5}
+.degree .school{font-size:13px;color:var(--muted);line-height:1.7}
+
+/* Contact closes the way the hero opened: a line of type, then a list on the right */
+.contact{padding:64px 0 72px;border-top:1px solid var(--ink)}
+.contact h2{font:clamp(2rem,1.2rem + 2vw,3.25rem)/1.15 var(--serif);letter-spacing:-.02em;margin-bottom:28px}
+.contact-grid{display:grid;grid-template-columns:minmax(0,1fr) 248px;gap:72px;align-items:start}
+.contact-copy{max-width:52ch;font-size:15px;line-height:1.75;color:var(--muted)}
+.contact-actions{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:24px}
+.contact-email{display:inline-flex;align-items:center;min-height:44px;font-size:clamp(1rem,.75rem + .7vw,1.375rem);letter-spacing:-.015em;text-decoration:none;max-width:100%}
+.contact-email span{overflow-wrap:anywhere}
+.copy-email{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:8px 12px;font-size:12px;color:var(--muted);border:1px solid var(--line)}
+.copy-email:hover{border-color:var(--strong);color:var(--ink)}
+.copy-email svg{flex:none}
+.contact-profiles{border-top:1px solid var(--ink);padding-top:4px}
+.contact-profiles a{display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:44px;font-size:13px;text-decoration:none;border-bottom:1px solid var(--line)}
+.contact-profiles li:last-child a{border-bottom:0}
+.footer{border-top:1px solid var(--line)}
+.footer .wrap{display:flex;align-items:center;justify-content:space-between;gap:22px;min-height:80px;font-size:12px;color:var(--muted)}
+.footer-links{display:inline-flex;gap:24px}
+.footer a{min-height:44px;display:inline-flex;align-items:center;text-decoration:none}
+.toast{position:fixed;z-index:50;bottom:max(20px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);padding:12px 16px;max-width:calc(100% - 40px);background:var(--ink);color:var(--paper);font-size:13px;border:1px solid var(--strong)}
+
+/* Breakpoints */
+@media (max-width:1050px){
+ .hero-grid,.contact-grid{grid-template-columns:minmax(0,1fr) 224px;gap:44px}
+ .nav{gap:20px}.nav-links{gap:18px}
+ .section-grid{grid-template-columns:136px minmax(0,1fr);gap:32px}
+ .research-item{grid-template-columns:28px 176px minmax(0,1fr);gap:20px}
+ .degree{grid-template-columns:110px 1fr;gap:6px 24px}.degree .school{grid-column:2}
+ .figure-note{gap:28px}
+ .metrics{grid-template-columns:1fr 1fr;gap:20px 24px}
+ .metric:nth-child(2){border-right:0;padding-right:0}
+}
+@media (max-width:800px){
+ .site-header{position:relative}
+ html{scroll-padding-top:24px}
+ .nav{flex-wrap:wrap;gap:0 20px;padding:10px 0 9px}
+ .nav-links{order:3;width:100%;margin-left:0;justify-content:space-between;gap:12px}
+ .theme-control{margin-left:auto;border-left:0;padding-left:0}
+ .hero-grid{grid-template-columns:1fr;gap:28px}
+ .hero-aside{border-top-color:var(--line);padding-top:12px}
+ .facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+ .facts li,.facts li:last-child{border:0;margin:0;padding:0}
+ .identity-strip{align-items:flex-start;flex-direction:column;gap:6px;margin-top:28px}
+ .section-grid{grid-template-columns:1fr;gap:24px}
+ .work-heading{align-items:start}
+ .work-heading p{max-width:24ch}
+ .contact-grid{grid-template-columns:1fr;gap:32px}
+}
+@media (max-width:600px){
+ .hero{padding-top:40px;padding-bottom:22px}
+ .role{margin-bottom:14px}
+ h1{margin-bottom:20px}
+ .hero-thesis{margin-bottom:18px}
+ .hero-copy{font-size:14px;line-height:1.75}
+ .hero-actions{gap:8px 20px;margin-top:24px}
+ .facts{display:block}
+ .facts li{border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:12px}
+ .facts li:last-child{border:0;margin:0;padding:0}
+ .identity-strip{margin-top:24px}
+ .work{padding:28px 0 44px}
+ .work-heading{display:block;margin-bottom:22px}
+ .work-heading p{display:none}
+ .figure-header{align-items:flex-start;flex-direction:column;gap:4px;padding:14px 0}
+ .metrics{grid-template-columns:1fr 1fr;gap:16px 12px;padding:16px 0 18px}
+ .metric:first-child,.metric:last-child{grid-column:1/-1;border:0;padding:0;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:4px 12px}
+ .metric:first-child dt,.metric:last-child dt{margin:0;min-height:0}
+ .metric:first-child dd,.metric:last-child dd{font-size:1rem;letter-spacing:-.01em}
+ .metric:last-child .unit{display:inline;margin-left:8px}
+ .metric:nth-child(2){border-right:1px solid var(--line);padding-right:12px}
+ .metric:nth-child(2) dt,.metric:nth-child(3) dt{min-height:3em}
+ .metric:last-child{border-top:1px solid var(--line);padding-top:12px}
+ .metric dd{font-size:1.375rem}
+ .metric dt{font-size:11px}
+ .plot{height:280px}
+ .static-y,.static-x{font-size:11px}
+ .legend{gap:9px 14px;font-size:11px;padding-top:8px}
+ .swatch{width:16px}
+ .swatch.band{width:16px}
+ .control-head{min-height:56px}
+ .control-caption{padding:0 51px 6px;font-size:10px}
+ .outcome{min-height:5.5em;margin-top:14px}
+ .figure-note,.method-grid,.engineering{grid-template-columns:1fr;gap:18px}
+ .figure-note{margin-top:18px}
+ .disclosures{margin-top:22px}
+ .content-section{padding:44px 0}
+ .section-grid{gap:20px}
+ .section-lede{font-size:14px}
+ .research-item{grid-template-columns:28px minmax(0,1fr);gap:8px 14px;padding:22px 0}
+ .research-item p{grid-column:2}
+ .paper{grid-template-columns:1fr;gap:6px;padding:22px 0}
+ .paper h3{font-size:16px}
+ .record-grid{grid-template-columns:1fr;gap:32px}
+ .degree{grid-template-columns:1fr;gap:4px;padding:18px 0}
+ .degree .school{grid-column:auto}
+ .contact{padding:44px 0 52px}
+ .contact h2{margin-bottom:22px}
+ .contact-copy{font-size:14px}
+ .footer .wrap{flex-wrap:wrap;gap:4px 14px;padding:16px 0;min-height:0}
+ .footer-note{order:3;width:100%;font-size:11px}
+ .footer-links{margin-left:auto}
+}
+@media (max-width:400px){
+ :root{--gutter:16px}
+ .nav{gap:0 12px}
+ .wordmark{gap:8px}
+ .brand-mark{width:22px;height:22px}
+ .nav-links{gap:0 12px}
+ .nav-links a{font-size:12px;min-height:40px}
+ .segmented label{padding:0 6px}
+ .name-ko{display:block;margin-top:8px}
+ .hero-actions{gap:4px 20px}
+ .primary-link{width:100%}
+ .control-head>label{font-size:11px}
+ .segmented span,.seg-label,.control-button.text{font-size:11px}
+ .metrics{gap:14px 10px}
+ .metric:nth-child(2){padding-right:10px}
+ .metric dd{font-size:1.125rem}
+ .figure-meta{font-size:11px}
+ .static-frame{right:47px}
+}
+@media (max-height:520px) and (orientation:landscape){
+ .hero{padding-top:28px}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media (forced-colors:active){
+ .primary-link{background:ButtonFace;color:ButtonText;border-color:ButtonText}
+ .swatch,.swatch.future,.swatch.dot{border-color:CanvasText}
+ .swatch.band{border:1px solid CanvasText}
+ .swatch.band span{background:transparent}
+ .segmented input:checked+span::after{background:CanvasText}
+ .plot{forced-color-adjust:none}
+ .fallback{color:CanvasText}
+ input[type="range"]{-webkit-appearance:auto;appearance:auto}
+}
+
+/* Print: the page becomes a one-page curriculum vitae, in every theme. */
+@media print{
+ @page{margin:11mm 13mm}
+ :root,:root[data-theme="dark"],:root:not([data-theme="light"]){
+  --paper:#fff;--surface:#fff;--ink:#000;--muted:#333;--line:#bbb;--strong:#777;--accent:#000;--up:#000;--down:#000;color-scheme:light
+ }
+ html{background:#fff;scroll-padding:0}
+ body{font:8.5pt/1.35 var(--sans);background:#fff;color:#000;padding:0}
+ .site-header,.work,.hero-aside,.hero-actions,.identity-strip,.section-lede,#contact,.footer,.toast,.skip{display:none!important}
+ .print-only{display:block!important}
+ .wrap{width:auto;max-width:none;margin:0}
+ .hero{padding:0 0 7pt;border-bottom:1px solid #000}
+ .hero-grid{display:block}
+ .role{font-size:8pt;margin-bottom:3pt;color:#333}
+ h1{font-size:22pt;letter-spacing:-.025em;margin:0 0 5pt}
+ .name-ko{display:inline;font-size:10.5pt;color:#333}
+ .hero-thesis{font-size:11pt;line-height:1.3;margin-bottom:4pt;max-width:none}
+ .hero-copy{font-size:8.5pt;line-height:1.35;max-width:none;color:#333}
+ .cv-contact{font-size:8pt;margin-top:5pt;color:#000}
+ .cv-contact span+span::before{content:"  ·  "}
+ .content-section{padding:6pt 0;border-top:0}
+ .section-grid{display:block}
+ .section-rail{margin-bottom:3pt;break-after:avoid}
+ .section-rail h2{font:600 10pt/1.3 var(--sans);letter-spacing:0}
+ .research-list,.paper-list,.education-list,.record-column>h3{border-top-color:#000}
+ .research-item{grid-template-columns:8mm 42mm minmax(0,1fr);gap:4mm;padding:3pt 0}
+ .research-item::before{font-size:7.5pt;padding-top:1pt}
+ .research-item h3{font-size:9pt;line-height:1.3}
+ .research-item p{grid-column:3;font-size:8pt;line-height:1.35}
+ .paper{grid-template-columns:12mm minmax(0,1fr);gap:4mm;padding:4pt 0}
+ .paper-year{font-size:7.5pt;padding-top:1pt}
+ .paper h3{font-size:9pt;line-height:1.35;margin-bottom:1.5pt}
+ .paper p{font-size:8pt;line-height:1.35}
+ .record-grid{display:grid;grid-template-columns:1fr 1fr;gap:8mm}
+ .record-column>h3{font-size:9pt;padding-top:3pt;margin-bottom:5pt}
+ .entry{gap:1.5pt;padding-bottom:5pt;margin-bottom:5pt}
+ .entry b{font-size:9pt;line-height:1.3}
+ .org,.note{font-size:8pt;line-height:1.35}
+ .note{margin-top:1.5pt}
+ .when{font-size:7.5pt}
+ .degree{grid-template-columns:26mm minmax(0,1fr) 44mm;gap:4mm;padding:3pt 0}
+ .degree .year{font-size:7.5pt;padding-top:1pt}
+ .degree strong{font-size:9pt;line-height:1.3}
+ .degree .school{grid-column:3;font-size:8pt}
+ .print-footer{margin-top:8pt;padding-top:4pt;border-top:1px solid #bbb;font-size:7.5pt;color:#555}
+ .paper,.research-item,.entry,.degree{break-inside:avoid}
+ a{color:#000;text-decoration:none}
+ .ext{display:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+ <div class="wrap nav">
+  <a class="wordmark" href="#main" aria-label="SeungBin Hong, introduction"><svg class="brand-mark" viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M3 22L8 17L13 20L18 14" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M18 14L29 6V14Z" fill="var(--up)" opacity=".3"/><path d="M18 14H29V22Z" fill="var(--down)" opacity=".3"/><path d="M18 14H29" stroke="currentColor" stroke-width="1"/><circle cx="18" cy="14" r="2" fill="currentColor"/></svg><span>SeungBin Hong</span></a>
+  <nav class="nav-links" aria-label="Sections">
+   <a href="#work">Research figure</a><a href="#research">Research</a><a href="#papers">Papers</a><a href="#record">Record</a><a href="#contact">Contact</a>
+  </nav>
+  <fieldset class="theme-control js-only">
+   <legend class="sr-only">Color theme</legend>
+   <div class="segmented">
+    <label><input type="radio" name="theme" value="system" checked><span>System</span></label>
+    <label><input type="radio" name="theme" value="light"><span>Light</span></label>
+    <label><input type="radio" name="theme" value="dark"><span>Dark</span></label>
+   </div>
+  </fieldset>
+ </div>
+</header>
+<main id="main" tabindex="-1">
+ <section class="hero" aria-labelledby="name">
+  <div class="wrap">
+   <div class="hero-grid">
+    <div class="hero-main">
+     <p class="role">Quantitative researcher</p>
+     <h1 id="name"><span class="name-en">SeungBin Hong</span> <span class="name-ko" lang="ko">홍승빈</span></h1>
+     <p class="hero-thesis">I study what information a decision actually needs, and what a model actually uses.</p>
+     <p class="hero-copy">My work focuses on <strong>financial machine learning and decision-making</strong>, with a broader interest in efficient AI.</p>
+     <div class="hero-actions">
+      <a class="primary-link" href="#work">Explore the work</a>
+      <button type="button" class="text-link js-only" id="print-cv">Print CV</button>
+      <a class="text-link" href="mailto:hongrizon@stu.jejunu.ac.kr">Email</a>
+     </div>
+     <p class="cv-contact print-only">
+<span><a href="mailto:hongrizon@stu.jejunu.ac.kr">hongrizon@stu.jejunu.ac.kr</a></span>
+<span><a href="https://hongrizon.github.io/">hongrizon.github.io</a></span>
+<span><a href="https://scholar.google.com/citations?user=oG6zMokAAAAJ">Google Scholar</a></span>
+<span><a href="https://www.linkedin.com/in/seungbin-hong-224a8b316">LinkedIn</a></span>
+<span>Jeju, Korea</span>
+</p>
+    </div>
+    <div class="hero-aside">
+     <h2 class="aside-title" id="glance-title">At a glance</h2>
+     <ul class="facts" aria-labelledby="glance-title">
+      <li><strong>2nd in Korea, 98th worldwide</strong><span>WorldQuant BRAIN Python Alphas Competition 2026</span></li>
+      <li><strong>Three first-author papers</strong><span>Financial forecasting, multimodal learning, and market representations</span></li>
+      <li><strong>WorldQuant BRAIN consultant</strong><span>Alpha research, 2024 to present</span></li>
+     </ul>
+    </div>
+   </div>
+   <div class="identity-strip">
+    <p>M.S. student in Data Science at Jeju National University, Jeju, Korea</p>
+    <ul class="social-links">
+     <li><a href="https://scholar.google.com/citations?user=oG6zMokAAAAJ" rel="me">Google Scholar<span class="ext" aria-hidden="true"> ↗</span></a></li>
+     <li><a href="https://github.com/HongRizon" rel="me">GitHub<span class="ext" aria-hidden="true"> ↗</span></a></li>
+     <li><a href="https://www.linkedin.com/in/seungbin-hong-224a8b316" rel="me">LinkedIn<span class="ext" aria-hidden="true"> ↗</span></a></li>
+    </ul>
+   </div>
+  </div>
+ </section>
+
+ <section class="work" id="work" aria-labelledby="work-title">
+  <div class="wrap">
+   <header class="work-heading">
+    <h2 id="work-title">Uncertainty, made visible.</h2>
+    <p>A financial question, an explicit baseline, and room to inspect the assumptions.</p>
+   </header>
+   <article id="financial-lab" aria-labelledby="fig-title">
+    <header class="figure-header">
+     <h3 id="fig-title">USD/KRW, forecast as a range</h3>
+     <p class="snapshot">Stored observations through <time id="last-obs" datetime="{{LAST_ISO}}">{{LAST_OBS}}</time></p>
+    </header>
+    <dl class="metrics">
+     <div class="metric"><dt>Forecast origin</dt><dd><time id="selected-date" datetime="{{LAST_ISO}}">{{LAST_OBS}}</time></dd></div>
+     <div class="metric"><dt>Observed rate</dt><dd><span id="fx-rate">{{RATE}}</span><span class="unit">KRW per USD</span></dd></div>
+     <div class="metric"><dt>90% interval, 20 observations ahead</dt><dd><span id="fx-range">{{RANGE}}</span><span class="unit" id="fx-range-pct">{{RANGE_PCT}}</span></dd></div>
+     <div class="metric"><dt>Volatility, annualized</dt><dd><span id="fx-vol">{{VOL}}</span><span class="unit">EWMA, λ = 0.94, √252</span></dd></div>
+    </dl>
+    <figure>
+     <div class="figure-meta" aria-hidden="true"><span>KRW per USD</span><span id="fx-hover">20-step forecast horizon</span></div>
+     <div class="plot" id="plot" role="img" aria-labelledby="fig-title" aria-describedby="fx-summary">
+      <div class="fallback" aria-hidden="true"><div class="static-frame">{{STATIC_SVG}}</div></div>
+      <canvas id="plot-canvas" aria-hidden="true"></canvas>
+     </div>
+     <figcaption class="legend">
+      <span><span class="swatch" aria-hidden="true"></span>Observed</span>
+      <span><span class="swatch future" aria-hidden="true"></span>Observed after the selected origin</span>
+      <span><span class="swatch band" aria-hidden="true"><span class="upper"></span><span class="lower"></span></span>50% and 90% intervals (upper half red, lower half blue)</span>
+      <span><span class="swatch dot" aria-hidden="true"></span>1-step miss</span>
+     </figcaption>
+    </figure>
+    <div class="chart-controls" role="group" aria-label="Chart controls">
+     <div class="control-head">
+      <label for="forecast-date">Forecast origin</label>
+      <button type="button" class="control-button text push" id="fx-latest" disabled>Latest</button>
+      <fieldset id="fx-window">
+       <legend class="sr-only">Observations shown before the latest record</legend>
+       <div class="segmented">
+        <span class="seg-label" aria-hidden="true">Window</span>
+        <label><input type="radio" name="window" value="65" disabled><span>65</span></label>
+        <label><input type="radio" name="window" value="130" checked disabled><span>130</span></label>
+        <label><input type="radio" name="window" value="260" disabled><span>260</span></label>
+       </div>
+      </fieldset>
+     </div>
+     <div class="range-row">
+      <button type="button" id="fx-prev" class="control-button" aria-label="Previous observation" disabled>←</button>
+      <input id="forecast-date" type="range" min="0" max="{{SLIDER_MAX}}" step="1" value="{{SLIDER_MAX}}" disabled aria-describedby="fx-keyboard" aria-valuetext="{{VALUETEXT}}">
+      <button type="button" id="fx-next" class="control-button" aria-label="Next observation" disabled>→</button>
+     </div>
+     <div class="control-caption"><span id="fx-start">{{START}}</span><span id="fx-end">{{LAST_OBS}}</span></div>
+     <p class="sr-only" id="fx-keyboard">Arrow keys move one observation. Page Up and Page Down move 20. Home selects the first visible observation; End selects the latest stored observation. The table below contains the forecast values.</p>
+    </div>
+    <p class="outcome" id="fx-outcome"><strong>Latest stored observation.</strong> The next 20 observations are not in this snapshot.</p>
+    <p class="chart-help">Point at the chart to read a value; select a date on it or use the slider to move the forecast origin. This is a historical baseline, not a live forecast.</p>
+    <div class="figure-note">
+     <p>Shading shows <strong>pointwise 50% and 90% intervals</strong> over the next 20 observations; red marks the upper half of each interval and blue the lower half, the convention of Korean markets. The dashed line reveals what was observed after the selected date; it is not used to make that forecast.</p>
+     <p>Hollow dots mark a different test: <strong>1-step 90% interval misses</strong>. From 2000 onward, <span id="miss-rate">{{MISS_RATE}}</span> of <span id="n-days">{{N_DAYS}}</span> observations fell outside the preceding interval.</p>
+    </div>
+    <div class="disclosures">
+     <details id="method"><summary>Method, assumptions and source</summary>
+      <div class="details-content method-grid">
+       <div><h4>What is being computed</h4>
+        <p>A zero-drift random walk in log prices. Volatility is estimated by an exponentially weighted average of past squared log returns (λ = 0.94) and annualized with √252 for the headline figure. Each selectable forecast uses observations available at its origin.</p>
+        <p class="formula">σ²ₜ = 0.94 σ²ₜ₋₁ + 0.06 r²ₜ<br>Interval at step h: Pₜ exp(± z σₜ √h)</p>
+        <p id="calib50">{{CALIB50}}</p>
+       </div>
+       <div><h4>What the figure does not imply</h4>
+        <p>This transparent reference model is not an AI model or a claim of predictive edge. A pointwise 90% interval is not a 90% guarantee for the entire path. Steps count observed records, not calendar days; market holidays are not extrapolated.</p>
+        <p>Source: Federal Reserve H.10 noon buying rates, read from the <a href="https://github.com/datasets/exchange-rates">datasets/exchange-rates<span class="ext" aria-hidden="true"> ↗</span></a> mirror, with FRED series DEXKOUS as the fallback. A scheduled build refreshes the snapshot after each weekly release; values are used as published, without reconciliation. No investment recommendation is made.</p>
+       </div>
+      </div>
+     </details>
+     <details id="forecast-data"><summary>Forecast values and data</summary>
+      <div class="details-content">
+       <p id="fx-summary">{{SUMMARY}}</p>
+       <section class="table-scroll" aria-label="Forecast values" tabindex="0">
+        <table>
+         <caption id="forecast-caption">{{CAPTION}}</caption>
+         <thead><tr><th scope="col">Step</th><th scope="col">90% lower</th><th scope="col">50% lower</th><th scope="col">50% upper</th><th scope="col">90% upper</th><th scope="col">Observed</th></tr></thead>
+         <tbody id="forecast-body">{{TABLE_ROWS}}</tbody>
+        </table>
+       </section>
+       <div class="downloads">
+        <button class="text-link js-only" type="button" id="download-data" disabled>Download stored observations (CSV)</button>
+        <button class="text-link js-only" type="button" id="download-forecast" disabled>Download the selected forecast (CSV)</button>
+       </div>
+      </div>
+     </details>
+     <details id="implementation"><summary>Implementation notes</summary>
+      <div class="details-content engineering">
+       <div><h4>Small by construction</h4><p>A self-contained document, system fonts, and no runtime dependencies, trackers, or remote data requests. Date gaps and exact cent-valued prices use a compact, lossless encoding. The readable source dataset is included in the project files.</p></div>
+       <div><h4>Work only when necessary</h4><p>Historical volatility is computed once. Grid geometry is cached; chart updates are batched to one animation frame, and hidden forecast rows are not regenerated on every drag. One short reveal plays when the figure first comes into view, unless reduced motion is requested; there is no idle animation or polling.</p></div>
+       <div><h4>Readable without the interaction</h4><p>The document, a static chart, the baseline forecast table, and the method are available without JavaScript. Native controls provide a separate keyboard path. Appearance follows your system unless you choose a theme.</p></div>
+       <div><h4>Reproducible by design</h4><p>A single build regenerates the embedded data, static chart, baseline table, and snapshot labels; a scheduled job fetches each weekly release and commits the page only when the data changed. Readable source files are kept separate from the self-contained published page.</p></div>
+      </div>
+     </details>
+    </div>
+    <p class="widget-error" id="fx-error" hidden>The interactive view is unavailable. The static chart, forecast table, and method remain readable.</p>
+    <noscript><p class="noscript-note">Static view. Enable JavaScript to choose a forecast origin; the figure, table, and research remain available without it.</p></noscript>
+   </article>
+  </div>
+ </section>
+
+ <section aria-labelledby="research-title" class="content-section" id="research">
+  <div class="wrap section-grid">
+   <header class="section-rail"><h2 id="research-title">Research</h2></header>
+   <div class="section-main">
+    <p class="section-lede">I care less about fashionable model names than about identifying what carries information, what a decision truly needs, and what a computation actually uses. I work end to end, from raw data and experimental design through implementation, inference, and the final manuscript.</p>
+    <ol class="research-list">
+     <li class="research-item">
+      <h3>Multimodal market forecasting</h3>
+      <p>Combining price series, market microstructure, text, accounting information, and visual representations to study what information carries predictive value in financial markets.</p>
+     </li>
+     <li class="research-item">
+      <h3>Decision-sufficient learning</h3>
+      <p>Studying the information and estimands a downstream decision actually requires, from point-in-time forecasting and model selection to abstention and evaluation under costs and uncertainty.</p>
+     </li>
+     <li class="research-item">
+      <h3>Function-aware machine learning</h3>
+      <p>Studying models by what their computations actually do rather than by convenient proxies, using intervention, invariance, representation design, and function-preserving transformations to make models more interpretable and efficient.</p>
+     </li>
+    </ol>
+   </div>
+  </div>
+ </section>
+
+ <section aria-labelledby="papers-title" class="content-section" id="papers">
+  <div class="wrap section-grid">
+   <header class="section-rail"><h2 id="papers-title">Papers</h2></header>
+   <div class="section-main">
+    <ul class="paper-list">
+     <li class="paper">
+      <span class="paper-year">2026</span>
+      <div>
+       <h3>Macro-FX multimodal fusion (MFMF): USD/KRW directional forecasting</h3>
+       <p>Korean Data and Information Science Society (KDISS). First author. Presentation award, honorable mention.</p>
+      </div>
+     </li>
+     <li class="paper">
+      <span class="paper-year">2025</span>
+      <div>
+       <h3>Machine learning-based cryptocurrency forecasting and trading: evaluating the effect of a timing overlay</h3>
+       <p>ICICPE 2025. First author.</p>
+      </div>
+     </li>
+     <li class="paper">
+      <span class="paper-year">2025</span>
+      <div>
+       <h3><a href="https://ack.kips.or.kr/society/kips/conference/ack2025/file/downloadSoConfManuscript/abs/KIPS_C2025B0374F">Volume-encoded candlesticks for real-time stablecoin volatility detection with ViT<span class="ext" aria-hidden="true"> ↗</span></a></h3>
+       <p>Seung-Bin Hong, Jung-Woon Kang, Min-Cheol Kim. ACK 2025, proceedings vol. 32, no. 2, pp. 829–830.</p>
+      </div>
+     </li>
+    </ul>
+   </div>
+  </div>
+ </section>
+
+ <section aria-labelledby="record-title" class="content-section" id="record">
+  <div class="wrap section-grid">
+   <header class="section-rail"><h2 id="record-title">Record</h2></header>
+   <div class="section-main">
+    <div class="record-grid">
+     <div class="record-column" id="experience">
+      <h3>Experience</h3>
+      <ul>
+       <li class="entry">
+        <div>
+         <b>Consultant</b>
+         <span class="org">WorldQuant BRAIN</span>
+         <span class="note">Alpha research on the BRAIN platform: designing signals in Python and evaluating them out of sample.</span>
+        </div>
+        <span class="when">2024–present</span>
+       </li>
+       <li class="entry">
+        <div>
+         <b>Student researcher</b>
+         <span class="org">Department of Data Science, Jeju National University</span>
+         <span class="note">Financial machine learning, multimodal forecasting, decision-making, and model efficiency.</span>
+        </div>
+        <span class="when">2025–26</span>
+       </li>
+       <li class="entry">
+        <div>
+         <b>Undergraduate researcher</b>
+         <span class="org">Social Data Science Education and Research Group, Jeju National University</span>
+        </div>
+        <span class="when">2025</span>
+       </li>
+      </ul>
+     </div>
+     <div class="record-column" id="honors">
+      <h3>Honors and competition results</h3>
+      <ul>
+       <li class="entry">
+        <div>
+         <b>2nd in Korea, 98th worldwide</b>
+         <span class="org"><a href="https://platform.worldquantbrain.com/competition/PAC2026">Python Alphas Competition 2026<span class="ext" aria-hidden="true"> ↗</span></a>, WorldQuant BRAIN</span>
+        </div>
+        <span class="when">2026</span>
+       </li>
+       <li class="entry">
+        <div>
+         <b>Paper presentation award, honorable mention</b>
+         <span class="org">Korean Data and Information Science Society, for the MFMF paper</span>
+        </div>
+        <span class="when">2026</span>
+       </li>
+       <li class="entry">
+        <div>
+         <b>Mock investment competitions</b>
+         <span class="note">Korea Investment &amp; Securities: 13th collegiate, 29th overseas league</span>
+         <span class="note">Kiwoom Securities: 35th competition, 65th domestic, 70th overseas league</span>
+        </div>
+        <span class="when">2024–25</span>
+       </li>
+      </ul>
+     </div>
+    </div>
+   </div>
+  </div>
+ </section>
+
+ <section aria-labelledby="education-title" class="content-section" id="education">
+  <div class="wrap section-grid">
+   <header class="section-rail"><h2 id="education-title">Education</h2></header>
+   <div class="section-main">
+    <ul class="education-list">
+     <li class="degree">
+      <span class="year">2026–present</span>
+      <strong>M.S., Data Science</strong>
+      <span class="school">Jeju National University</span>
+     </li>
+     <li class="degree">
+      <span class="year">2024–26</span>
+      <strong>B.S., Data Science</strong>
+      <span class="school">Jeju National University</span>
+     </li>
+     <li class="degree">
+      <span class="year">2022–24</span>
+      <strong>Undergraduate study, Intelligent System Engineering</strong>
+      <span class="school">Cheju Halla University</span>
+     </li>
+    </ul>
+   </div>
+  </div>
+ </section>
+
+ <section aria-labelledby="contact-title" class="contact" id="contact">
+  <div class="wrap">
+   <h2 id="contact-title">Let’s talk.</h2>
+   <div class="contact-grid">
+    <div>
+     <p class="contact-copy">For research, collaboration, or a conversation about financial machine learning, email is the best way to reach me.</p>
+     <div class="contact-actions">
+      <a class="contact-email" href="mailto:hongrizon@stu.jejunu.ac.kr"><span>hongrizon@stu.jejunu.ac.kr</span></a>
+      <button class="copy-email js-only" id="copy-email" type="button" aria-label="Copy email address"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5.5" y="5.5" width="8" height="8"/><path d="M10.5 5.5V2.5h-8v8h3"/></svg><span>Copy</span></button>
+     </div>
+    </div>
+    <ul class="contact-profiles">
+     <li><a href="https://scholar.google.com/citations?user=oG6zMokAAAAJ" rel="me">Google Scholar<span class="ext" aria-hidden="true"> ↗</span></a></li>
+     <li><a href="https://github.com/HongRizon" rel="me">GitHub<span class="ext" aria-hidden="true"> ↗</span></a></li>
+     <li><a href="https://www.linkedin.com/in/seungbin-hong-224a8b316" rel="me">LinkedIn<span class="ext" aria-hidden="true"> ↗</span></a></li>
+    </ul>
+   </div>
+  </div>
+ </section>
+ <p class="print-only print-footer">Curriculum vitae of SeungBin Hong, from hongrizon.github.io<span id="print-date"></span>.</p>
+</main>
+<footer class="footer"><div class="wrap"><span>© <span id="year">2026</span> SeungBin Hong</span><span class="footer-note">Financial machine learning and decision-making</span><span class="footer-links"><a href="https://github.com/HongRizon/hongrizon.github.io">Source<span class="ext" aria-hidden="true"> ↗</span></a><a href="#main">Back to top</a></span></div></footer>
+<div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true" hidden></div>
+{{DATA}}
+<script>
+/* Progressive enhancement. The document, a matched static figure and a forecast table exist first. */
+(() => {
+ 'use strict';
+ const root=document.documentElement, $=id=>document.getElementById(id);
+ root.classList.add('js');
+ const dark=matchMedia('(prefers-color-scheme: dark)');
+ const forced=matchMedia('(forced-colors: active)');
+ const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+ const onMedia=(q,fn)=>q.addEventListener?q.addEventListener('change',fn):q.addListener(fn);
+ const MONTH=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+ /* Theme: three radios in the header; the choice persists and follows across open tabs. */
+ const themeInputs=[...document.querySelectorAll('input[name="theme"]')];
+ function themeValue(){return root.dataset.theme||'system'}
+ function themeColor(){
+  const v=themeValue(),isDark=v==='dark'||(v==='system'&&dark.matches);
+  document.querySelectorAll('meta[name="theme-color"]').forEach(m=>{m.removeAttribute('media');m.content=isDark?'#141a20':'#fafaf8'});
+ }
+ function reflectTheme(){const v=themeValue();themeInputs.forEach(i=>{i.checked=i.value===v})}
+ function applyTheme(v,persist){
+  if(v==='system')delete root.dataset.theme;else root.dataset.theme=v;
+  if(persist){try{localStorage.setItem('sbh-theme',v)}catch(_){}}
+  reflectTheme();themeColor();document.dispatchEvent(new Event('portfolio:theme'));
+ }
+ themeInputs.forEach(i=>i.addEventListener('change',()=>{if(i.checked)applyTheme(i.value,true)}));
+ addEventListener('storage',e=>{
+  if(e.key!=='sbh-theme')return;
+  applyTheme(e.newValue==='light'||e.newValue==='dark'?e.newValue:'system',false);
+ });
+ onMedia(dark,()=>{themeColor();document.dispatchEvent(new Event('portfolio:theme'))});
+ onMedia(forced,()=>document.dispatchEvent(new Event('portfolio:theme')));
+ reflectTheme();themeColor();
+
+ $('year').textContent=String(new Date().getFullYear());
+ $('print-cv').addEventListener('click',()=>window.print());
+ addEventListener('beforeprint',()=>{
+  const d=new Date();
+  $('print-date').textContent=`, printed ${d.getDate()} ${MONTH[d.getMonth()]} ${d.getFullYear()}`;
+ });
+
+ let toastTimer=0;
+ function notify(message){
+  clearTimeout(toastTimer);$('toast').textContent=message;$('toast').hidden=false;
+  toastTimer=setTimeout(()=>{$('toast').hidden=true},5000);
+ }
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'){$('toast').hidden=true;clearTimeout(toastTimer)}});
+ const copyButton=$('copy-email'),copyLabel=copyButton.querySelector('span');
+ let copyTimer=0;
+ copyButton.addEventListener('click',async()=>{
+  const address='hongrizon@stu.jejunu.ac.kr',active=document.activeElement;
+  let copied=false;
+  try{if(navigator.clipboard&&isSecureContext){await navigator.clipboard.writeText(address);copied=true}}catch(_){}
+  if(!copied){
+   const field=document.createElement('textarea');
+   field.value=address;field.readOnly=true;
+   field.style.cssText='position:fixed;left:-10000px;top:0;font-size:16px';
+   document.body.append(field);field.select();
+   try{copied=document.execCommand('copy')}catch(_){}
+   field.remove();if(active&&active.focus)active.focus({preventScroll:true});
+  }
+  if(copied){
+   copyLabel.textContent='Copied';clearTimeout(copyTimer);
+   copyTimer=setTimeout(()=>{copyLabel.textContent='Copy'},2000);
+  }
+  notify(copied?'Email address copied.':'Copy is unavailable here. Select the address or use the email link.');
+ });
+
+ /* Section-aware navigation without a scroll listener. */
+ if('IntersectionObserver'in window){
+  const links=[...document.querySelectorAll('.nav-links a')];
+  const observed=[document.querySelector('.hero'),...links.map(a=>document.querySelector(a.hash))];
+  const visible=new Set();
+  const navObserver=new IntersectionObserver(entries=>{
+   entries.forEach(e=>e.isIntersecting?visible.add(e.target):visible.delete(e.target));
+   const current=observed.find(s=>visible.has(s));
+   if(!current)return;
+   links.forEach(a=>a.hash==='#'+current.id?a.setAttribute('aria-current','location'):a.removeAttribute('aria-current'));
+  },{rootMargin:'-18% 0px -66% 0px'});
+  observed.forEach(s=>navObserver.observe(s));
+ }
+
+ /* The static figure reserves exactly the space the interactive view will use. */
+ let started=false;
+ function startChart(){
+  if(started)return;started=true;
+  try{initChart()}catch(error){
+   $('financial-lab').classList.remove('chart-ready');
+   $('fx-error').hidden=false;
+   console.error('Interactive figure unavailable:',error);
+  }
+ }
+ if('IntersectionObserver'in window){
+  const observer=new IntersectionObserver(entries=>{
+   if(entries.some(e=>e.isIntersecting)){observer.disconnect();startChart()}
+  },{rootMargin:'240px 0px'});
+  observer.observe($('financial-lab'));
+ }else startChart();
+
+ function initChart(){
+  const initAt=performance.now();
+  const raw=JSON.parse($('usdkrw').textContent);
+  if(raw.encoding!=='cents-delta36-v1'||!Number.isSafeInteger(raw.firstCents)||raw.firstCents<=0||
+     typeof raw.deltaCents36!=='string'||typeof raw.gaps!=='string'||
+     !/^[1-9a-z]+$/.test(raw.gaps)||!/^\d{4}-\d{2}-\d{2}$/.test(raw.start))
+   throw new Error('Invalid embedded data format.');
+  const delta=raw.deltaCents36.split(','),N=delta.length+1,END=N-1;
+  if(N<300||raw.gaps.length!==N-1)throw new Error('Observation count mismatch.');
+  const price=new Float64Array(N),date=new Float64Array(N);
+  let cents=raw.firstCents;price[0]=cents/100;date[0]=Date.parse(raw.start+'T00:00:00Z');
+  if(!Number.isFinite(date[0])||new Date(date[0]).toISOString().slice(0,10)!==raw.start)throw new Error('Invalid start date.');
+  for(let i=1;i<N;i++){
+   if(!/^-?[0-9a-z]+$/.test(delta[i-1]))throw new Error('Invalid price delta.');
+   cents+=parseInt(delta[i-1],36);
+   if(!Number.isSafeInteger(cents)||cents<=0)throw new Error('Invalid price.');
+   price[i]=cents/100;
+   date[i]=date[i-1]+parseInt(raw.gaps[i-1],36)*86400000;
+  }
+  const f2=new Intl.NumberFormat('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+  const f1=new Intl.NumberFormat('en-US',{minimumFractionDigits:1,maximumFractionDigits:1});
+  const f0=new Intl.NumberFormat('en-US',{maximumFractionDigits:0});
+  const signed=x=>(x<0?'−':'+')+f1.format(Math.abs(x*100))+'%';
+  const fmt=i=>{const d=new Date(date[i]);return `${String(d.getUTCDate()).padStart(2,'0')} ${MONTH[d.getUTCMonth()]} ${d.getUTCFullYear()}`};
+  const iso=i=>new Date(date[i]).toISOString().slice(0,10);
+  const clamp=(n,a,b)=>Math.min(b,Math.max(a,n));
+  const WARM=20,H=20,L=.94,Z90=1.6448536,Z50=.6744898,ANNUAL=Math.sqrt(252);
+  const sigma=new Float64Array(N),miss=new Int8Array(N),sqrt=new Float64Array(H*4+1);
+  for(let k=0;k<sqrt.length;k++)sqrt[k]=Math.sqrt(k/4);
+  let variance=0,count=0,in90=0,in50=0;
+  for(let i=1;i<=WARM;i++)variance+=Math.log(price[i]/price[i-1])**2;
+  variance/=WARM;
+  for(let i=0;i<=WARM;i++)sigma[i]=Math.sqrt(variance);
+  for(let i=WARM+1;i<N;i++){
+   const r=Math.log(price[i]/price[i-1]);
+   variance=L*variance+(1-L)*r*r;sigma[i]=Math.sqrt(variance);
+   if(i<WARM+2)continue; // the first evaluated index follows the warm-up window
+   if(r>Z90*sigma[i-1])miss[i]=1;else if(r< -Z90*sigma[i-1])miss[i]=-1;
+   if(date[i]>=Date.UTC(2000,0,1)){
+    count++;if(!miss[i])in90++;if(Math.abs(r)<=Z50*sigma[i-1])in50++;
+   }
+  }
+  const interval=(a,k,z=Z90)=>{const w=z*sigma[a]*Math.sqrt(k);return[price[a]*Math.exp(-w),price[a]*Math.exp(w)]};
+  $('miss-rate').textContent=((1-in90/count)*100).toFixed(1)+'%';
+  $('n-days').textContent=f0.format(count);
+  $('calib50').textContent=`The 50% interval contained ${(100*in50/count).toFixed(1)}% of the evaluated observations. These are descriptive coverage rates, not a guarantee of future calibration.`;
+  const plot=$('plot'),canvas=$('plot-canvas'),slider=$('forecast-date'),lab=$('financial-lab'),hoverOut=$('fx-hover');
+  const windowInputs=[...document.querySelectorAll('input[name="window"]')];
+  const ctx=canvas.getContext('2d');
+  if(!ctx)throw new Error('Canvas 2D unavailable.');
+  const grid=document.createElement('canvas'),gc=grid.getContext('2d');
+  if(!gc)throw new Error('Canvas cache unavailable.');
+  let history=Number((windowInputs.find(i=>i.checked)||{value:130}).value)||130;
+  let anchor=END,width=0,height=0,dpr=1,low=0,high=1,g=null,hover=null;
+  let frame=0,layoutDirty=true,colorDirty=true,viewDirty=true,tableDirty=true,stopped=false;
+  let chartFont='sans-serif';
+  const C={},start=()=>Math.max(WARM+1,END-history);
+  const rows=[...$('forecast-body').rows];
+  const HOVER_DEFAULT=hoverOut.textContent;
+  function colors(){
+   const style=getComputedStyle(root);chartFont=getComputedStyle(document.body).fontFamily;
+   ['paper','ink','muted','line','strong','up','down'].forEach(k=>C[k]=style.getPropertyValue('--'+k).trim());
+   C.bandA=parseFloat(style.getPropertyValue('--band-a'))||.12;C.bandB=parseFloat(style.getPropertyValue('--band-b'))||.19;
+   if(forced.matches){
+    const probe=document.createElement('span');
+    probe.style.cssText='position:absolute;color:CanvasText;background:Canvas';
+    document.body.append(probe);const p=getComputedStyle(probe);
+    C.ink=p.color;C.paper=p.backgroundColor;C.muted=C.line=C.strong=C.up=C.down=C.ink;probe.remove();
+   }
+  }
+  function limits(){
+   low=Infinity;high=-Infinity;
+   for(let i=start();i<=END;i++){const [a,b]=interval(i,H);low=Math.min(low,a);high=Math.max(high,b)}
+   const pad=(high-low)*.055||1;low-=pad;high+=pad;
+  }
+  const crisp=v=>(Math.round(v*dpr-.5)+.5)/dpr;
+  function fit(){
+   const r=plot.getBoundingClientRect(),nd=Math.min(devicePixelRatio||1,2);
+   if(r.width===width&&r.height===height&&dpr===nd)return;
+   width=r.width;height=r.height;dpr=nd;
+   for(const c of [canvas,grid]){c.width=Math.max(1,Math.round(width*dpr));c.height=Math.max(1,Math.round(height*dpr))}
+   ctx.setTransform(dpr,0,0,dpr,0,0);gc.setTransform(dpr,0,0,dpr,0,0);
+  }
+  function geometry(){
+   const left=2,right=width<400?47:57,top=13,bottom=31;
+   const pw=width-left-right,ph=height-top-bottom,s=start(),end=END+H;
+   g={left,right,top,bottom,pw,ph,s,
+    X:i=>left+(i-s)/(end-s)*pw,
+    Y:p=>top+(1-(p-low)/(high-low))*ph
+   };
+  }
+  function niceStep(v){
+   const mag=10**Math.floor(Math.log10(v)),x=v/mag;
+   return(x<1.5?1:x<3.5?2:x<7.5?5:10)*mag;
+  }
+  function cacheGrid(){
+   const {X,Y,left,top,pw,ph}=g;
+   gc.clearRect(0,0,width,height);
+   gc.font=`${width<500?11:12}px ${chartFont}`;
+   gc.lineWidth=1;gc.textBaseline='middle';gc.textAlign='left';
+   const step=niceStep((high-low)/(width<500?4:5));
+   for(let v=Math.ceil(low/step)*step;v<high;v+=step){
+    const y=crisp(Y(v));gc.strokeStyle=C.line;
+    gc.beginPath();gc.moveTo(left,y);gc.lineTo(left+pw,y);gc.stroke();
+    gc.fillStyle=C.muted;gc.fillText(f0.format(v),left+pw+9,y);
+   }
+   let lastMonth=-1,lastX=-100;
+   for(let i=g.s;i<=END;i++){
+    const d=new Date(date[i]),m=d.getUTCFullYear()*12+d.getUTCMonth();
+    if(lastMonth===m)continue;
+    const initial=lastMonth===-1;lastMonth=m;
+    if(initial)continue;
+    const x=X(i),label=d.getUTCMonth()?MONTH[d.getUTCMonth()]:String(d.getUTCFullYear());
+    if(x-lastX<66||x>left+pw-46)continue;
+    lastX=x;
+    gc.strokeStyle=C.line;gc.beginPath();gc.moveTo(crisp(x),top+ph);gc.lineTo(crisp(x),top+ph+5);gc.stroke();
+    gc.fillStyle=C.muted;gc.textBaseline='alphabetic';gc.fillText(label,x+3,height-7);
+   }
+  }
+  function hoverTarget(){
+   if(hover===null||!g)return null;
+   if(hover>anchor+.5){const k=clamp(Math.round(hover-anchor),1,H);return{kind:'step',k,i:anchor+k}}
+   return{kind:'obs',i:clamp(Math.round(hover),g.s,END)};
+  }
+  function draw(){
+   if(width<10)return;
+   const {X,Y,left,top,pw,ph,s}=g,pa=price[anchor],sa=sigma[anchor];
+   ctx.clearRect(0,0,width,height);
+   ctx.drawImage(grid,0,0,grid.width,grid.height,0,0,width,height);
+   ctx.save();ctx.beginPath();ctx.rect(left,top-1,pw,ph+2);ctx.clip();
+   function band(z,color,opacity){
+    ctx.beginPath();ctx.moveTo(X(anchor),Y(pa));
+    for(let k=1;k<sqrt.length;k++)ctx.lineTo(X(anchor+k/4),Y(pa*Math.exp(z*sa*sqrt[k])));
+    ctx.lineTo(X(anchor+H),Y(pa));ctx.closePath();
+    ctx.fillStyle=color;ctx.globalAlpha=opacity;ctx.fill();ctx.globalAlpha=1;
+   }
+   band(Z90,C.up,C.bandA);band(Z50,C.up,C.bandB);band(-Z90,C.down,C.bandA);band(-Z50,C.down,C.bandB);
+   ctx.lineJoin='round';ctx.lineCap='round';ctx.strokeStyle=C.ink;ctx.lineWidth=1.5;
+   ctx.beginPath();ctx.moveTo(X(s),Y(price[s]));
+   for(let i=s+1;i<=anchor;i++)ctx.lineTo(X(i),Y(price[i]));
+   ctx.stroke();
+   if(anchor<END){
+    ctx.beginPath();ctx.moveTo(X(anchor),Y(pa));
+    for(let i=anchor+1;i<=END;i++)ctx.lineTo(X(i),Y(price[i]));
+    ctx.strokeStyle=C.muted;ctx.lineWidth=1.25;ctx.setLineDash([4,3]);ctx.stroke();ctx.setLineDash([]);
+   }
+   // Hollow dots distinguish misses without relying on red and blue alone.
+   for(let i=s+1;i<=END;i++){
+    if(!miss[i])continue;
+    ctx.beginPath();ctx.arc(X(i),Y(price[i]),3.5,0,Math.PI*2);
+    ctx.fillStyle=C.paper;ctx.fill();ctx.strokeStyle=miss[i]>0?C.up:C.down;ctx.lineWidth=1.5;ctx.stroke();
+   }
+   ctx.strokeStyle=C.strong;ctx.lineWidth=1;
+   ctx.beginPath();ctx.moveTo(X(anchor),Y(pa));ctx.lineTo(X(anchor+H),Y(pa));ctx.stroke();
+   ctx.setLineDash([2,4]);ctx.beginPath();ctx.moveTo(crisp(X(anchor)),top);ctx.lineTo(crisp(X(anchor)),top+ph);ctx.stroke();ctx.setLineDash([]);
+   ctx.beginPath();ctx.arc(X(anchor),Y(pa),4,0,Math.PI*2);ctx.fillStyle=C.ink;ctx.fill();
+   ctx.strokeStyle=C.paper;ctx.lineWidth=1.5;ctx.stroke();
+   // Hover layer: a hairline snapped to the nearest observation or forecast step.
+   const t=hoverTarget();
+   if(X(anchor+H)-X(anchor)>58&&!(t&&t.kind==='step'&&t.k>H-5)){
+    ctx.textAlign='right';ctx.textBaseline='middle';ctx.font=`11px ${chartFont}`;ctx.fillStyle=C.muted;
+    const x=X(anchor+H)-6,y90=Y(pa*Math.exp(Z90*sa*Math.sqrt(H))),y50=Y(pa*Math.exp(Z50*sa*Math.sqrt(H))),mid=Y(pa);
+    if(y50-y90>17)ctx.fillText('90%',x,(y90+y50)/2);
+    if(mid-y50>17)ctx.fillText('50%',x,(mid+y50)/2);
+   }
+   if(t){
+    const x=crisp(X(t.i));
+    ctx.strokeStyle=C.strong;ctx.lineWidth=1;ctx.setLineDash([2,3]);
+    ctx.beginPath();ctx.moveTo(x,top);ctx.lineTo(x,top+ph);ctx.stroke();ctx.setLineDash([]);
+    if(t.kind==='step'){
+     const [lo,hi]=interval(anchor,t.k),[lo50,hi50]=interval(anchor,t.k,Z50);
+     ctx.strokeStyle=C.ink;ctx.lineWidth=1;
+     ctx.beginPath();ctx.moveTo(x,Y(lo));ctx.lineTo(x,Y(hi));ctx.stroke();
+     for(const v of [lo,lo50,hi50,hi]){ctx.beginPath();ctx.moveTo(x-4,crisp(Y(v)));ctx.lineTo(x+4,crisp(Y(v)));ctx.stroke()}
+     if(t.i<=END){
+      ctx.beginPath();ctx.arc(X(t.i),Y(price[t.i]),3.5,0,Math.PI*2);
+      ctx.fillStyle=C.paper;ctx.fill();ctx.strokeStyle=C.ink;ctx.lineWidth=1.5;ctx.stroke();
+     }
+    }else{
+     ctx.beginPath();ctx.arc(X(t.i),Y(price[t.i]),4,0,Math.PI*2);
+     ctx.fillStyle=C.paper;ctx.fill();ctx.strokeStyle=C.ink;ctx.lineWidth=1.5;ctx.stroke();
+    }
+   }
+   ctx.restore();
+  }
+  function describeHover(){
+   const t=hoverTarget();
+   if(!t){hoverOut.textContent=HOVER_DEFAULT;hoverOut.classList.remove('is-live');return}
+   let text;
+   if(t.kind==='step'){
+    const [lo,hi]=interval(anchor,t.k),[lo50,hi50]=interval(anchor,t.k,Z50);
+    text=`+${t.k}: 90% ${f2.format(lo)}–${f2.format(hi)}, 50% ${f2.format(lo50)}–${f2.format(hi50)}`;
+    if(t.i<=END)text+=`, observed ${f2.format(price[t.i])}`;
+   }else{
+    text=`${fmt(t.i)}: ${f2.format(price[t.i])}`;
+    if(t.i>0)text+=`, ${signed(price[t.i]/price[t.i-1]-1)} on the day`;
+    if(miss[t.i])text+=`, 1-step miss ${miss[t.i]>0?'above':'below'}`;
+   }
+   hoverOut.textContent=text;hoverOut.classList.add('is-live');
+  }
+  function describe(){
+   const [lo,hi]=interval(anchor,H),day=fmt(anchor);
+   $('selected-date').textContent=day;$('selected-date').dateTime=iso(anchor);
+   $('fx-rate').textContent=f2.format(price[anchor]);
+   $('fx-range').textContent=`${f0.format(lo)}–${f0.format(hi)}`;
+   $('fx-range-pct').textContent=`${signed(lo/price[anchor]-1)} to ${signed(hi/price[anchor]-1)}`;
+   $('fx-vol').textContent=f1.format(sigma[anchor]*ANNUAL*100)+'%';
+   slider.min='0';slider.max=String(END-start());slider.value=String(anchor-start());
+   slider.setAttribute('aria-valuetext',`${day}, ${f2.format(price[anchor])} KRW per USD. 20-step 90 percent interval ${f2.format(lo)} to ${f2.format(hi)}.`);
+   $('fx-start').textContent=fmt(start());$('fx-end').textContent=fmt(END);
+   $('fx-prev').disabled=anchor===start();$('fx-next').disabled=anchor===END;$('fx-latest').disabled=anchor===END;
+   let outcome;
+   if(anchor+H<=END){
+    const actual=price[anchor+H],position=actual<lo?'below':actual>hi?'above':'inside';
+    outcome=`After 20 observations: ${f2.format(actual)} KRW per USD, ${position} that date’s 90% interval.`;
+   }else if(anchor===END)outcome='Latest stored observation. The next 20 observations are not in this snapshot.';
+   else outcome=`${END-anchor} subsequent observations are available; the 20-step outcome is not yet in this snapshot.`;
+   // Text only: never inject data or arbitrary HTML into the page.
+   $('fx-outcome').textContent=outcome;
+   $('fx-summary').textContent=`Visible observations run from ${fmt(start())} to ${fmt(END)}, moving from ${f2.format(price[start()])} to ${f2.format(price[END])} KRW per USD. Forecast origin: ${day} at ${f2.format(price[anchor])}. The pointwise 20-step 90% interval is ${f2.format(lo)} to ${f2.format(hi)}. ${outcome}`;
+   tableDirty=true;if($('forecast-data').open)updateTable();
+  }
+  function updateTable(){
+   if(!tableDirty)return;
+   $('forecast-caption').textContent=`Forecast from ${fmt(anchor)}. Units: KRW per USD. Each interval applies separately at its step.`;
+   for(let k=1;k<=H;k++){
+    const r=interval(anchor,k),q=interval(anchor,k,Z50),cells=rows[k-1].cells;
+    cells[1].textContent=f2.format(r[0]);cells[2].textContent=f2.format(q[0]);
+    cells[3].textContent=f2.format(q[1]);cells[4].textContent=f2.format(r[1]);
+    cells[5].textContent=anchor+k<=END?f2.format(price[anchor+k]):'Not observed';
+   }
+   tableDirty=false;
+  }
+  function render(){
+   frame=0;if(stopped)return;
+   if(layoutDirty||viewDirty||colorDirty){
+    if(colorDirty)colors();
+    if(layoutDirty)fit();
+    if(viewDirty)limits();
+    geometry();cacheGrid();layoutDirty=viewDirty=colorDirty=false;
+   }
+   draw();describe();describeHover();
+  }
+  function queue(){
+   if(frame||stopped)return;
+   frame=requestAnimationFrame(()=>{
+    try{render()}catch(error){
+     stopped=true;lab.classList.remove('chart-ready');$('fx-error').hidden=false;
+     document.querySelectorAll('.chart-controls button,.chart-controls input').forEach(e=>e.disabled=true);
+     console.error('Chart update failed:',error);
+    }
+   });
+  }
+  /* One reveal, once: the origin walks forward to the latest observation when the figure first comes into view. */
+  let revealFrame=0,interacted=false,revealed=false;
+  function stopReveal(){if(revealFrame){cancelAnimationFrame(revealFrame);revealFrame=0}}
+  function userActed(){interacted=true;stopReveal()}
+  function reveal(){
+   if(revealed||interacted||stopped||reduced.matches||document.hidden)return;
+   revealed=true;
+   const from=Math.max(start(),END-40);
+   if(from>=END)return;
+   const t0=performance.now(),ms=1400;
+   const tick=now=>{
+    const k=Math.min(1,(now-t0)/ms),e=1-Math.pow(1-k,3);
+    anchor=Math.round(from+(END-from)*e);
+    try{draw();describe()}catch(error){revealFrame=0;console.error('Reveal stopped:',error);return}
+    revealFrame=k<1?requestAnimationFrame(tick):0;
+   };
+   revealFrame=requestAnimationFrame(tick);
+  }
+  function select(i){
+   const next=clamp(Math.round(i),start(),END);
+   if(next===anchor)return;anchor=next;queue();
+  }
+  windowInputs.forEach(input=>input.addEventListener('change',()=>{
+   if(!input.checked)return;userActed();
+   history=Number(input.value);anchor=clamp(anchor,start(),END);viewDirty=true;queue();
+  }));
+  slider.addEventListener('input',()=>{userActed();select(start()+Number(slider.value))});
+  slider.addEventListener('keydown',e=>{
+   if(e.key==='PageUp'||e.key==='PageDown'){
+    e.preventDefault();userActed();select(anchor+(e.key==='PageUp'?H:-H));
+   }
+  });
+  $('fx-prev').addEventListener('click',()=>{userActed();select(anchor-1)});
+  $('fx-next').addEventListener('click',()=>{userActed();select(anchor+1)});
+  $('fx-latest').addEventListener('click',()=>{userActed();select(END)});
+  $('forecast-data').addEventListener('toggle',()=>{if($('forecast-data').open)updateTable()});
+  let pointer=null,originX=0,originY=0,leftEdge=0,touch=false,moved=false;
+  const indexAt=x=>g?g.s+(x-leftEdge-g.left)/g.pw*(END+H-g.s):null;
+  function selectAt(x){const i=indexAt(x);if(i!==null)select(i)}
+  function hoverAt(x){
+   if(!g)return;
+   leftEdge=plot.getBoundingClientRect().left;
+   const i=clamp(indexAt(x),g.s,END+H);
+   if(i!==hover){hover=i;queue()}
+  }
+  function clearHover(){if(hover!==null){hover=null;queue()}}
+  plot.addEventListener('pointerdown',e=>{
+   if(e.button!==0||!e.isPrimary)return;
+   userActed();
+   pointer=e.pointerId;originX=e.clientX;originY=e.clientY;leftEdge=plot.getBoundingClientRect().left;
+   touch=e.pointerType!=='mouse';moved=false;
+   if(!touch){plot.setPointerCapture(e.pointerId);hover=null;selectAt(e.clientX)}
+  },{passive:true});
+  plot.addEventListener('pointermove',e=>{
+   if(pointer===null){if(e.pointerType==='mouse')hoverAt(e.clientX);return}
+   if(pointer!==e.pointerId)return;
+   const dx=e.clientX-originX,dy=e.clientY-originY;
+   if(touch){
+    if(!moved&&Math.abs(dy)>8&&Math.abs(dy)>Math.abs(dx)){pointer=null;return}
+    if(!moved&&Math.abs(dx)<8)return;
+    moved=true;
+   }
+   selectAt(e.clientX);
+  },{passive:true});
+  plot.addEventListener('pointerup',e=>{
+   if(pointer!==e.pointerId)return;
+   if(touch&&!moved&&Math.abs(e.clientY-originY)<8)selectAt(e.clientX);
+   pointer=null;
+  },{passive:true});
+  plot.addEventListener('pointercancel',()=>{pointer=null},{passive:true});
+  plot.addEventListener('lostpointercapture',()=>{pointer=null},{passive:true});
+  plot.addEventListener('pointerleave',e=>{if(e.pointerType==='mouse')clearHover()},{passive:true});
+  /* CSVs are allocated only on explicit request. */
+  function saveCSV(name,content){
+   const blob=new Blob(['﻿'+content],{type:'text/csv;charset=utf-8'});
+   const url=URL.createObjectURL(blob),a=document.createElement('a');
+   a.href=url;a.download=name;document.body.append(a);a.click();a.remove();
+   setTimeout(()=>URL.revokeObjectURL(url),10000);
+  }
+  $('download-data').addEventListener('click',()=>{
+   const lines=['date,krw_per_usd'];
+   for(let i=0;i<N;i++)lines.push(`${iso(i)},${price[i].toFixed(2)}`);
+   saveCSV('usdkrw-observations.csv',lines.join('\r\n'));
+  });
+  $('download-forecast').addEventListener('click',()=>{
+   const lines=['origin_date,step,median_krw_per_usd,lower_50,upper_50,lower_90,upper_90,observed'];
+   for(let k=1;k<=H;k++){
+    const r=interval(anchor,k),q=interval(anchor,k,Z50);
+    lines.push(`${iso(anchor)},${k},${price[anchor].toFixed(2)},${q[0].toFixed(6)},${q[1].toFixed(6)},${r[0].toFixed(6)},${r[1].toFixed(6)},${anchor+k<=END?price[anchor+k].toFixed(2):''}`);
+   }
+   saveCSV(`usdkrw-forecast-${iso(anchor)}.csv`,lines.join('\r\n'));
+  });
+  function resize(){layoutDirty=true;queue()}
+  if('ResizeObserver'in window)new ResizeObserver(resize).observe(plot);
+  addEventListener('resize',resize,{passive:true});
+  document.addEventListener('portfolio:theme',()=>{colorDirty=true;queue()});
+  document.addEventListener('visibilitychange',()=>{
+   if(document.hidden){if(frame){cancelAnimationFrame(frame);frame=0}stopReveal()}
+   else{layoutDirty=true;queue()}
+  });
+  onMedia(reduced,()=>{if(reduced.matches){stopReveal();anchor=END;queue()}});
+  render();
+  lab.classList.add('chart-ready');
+  slider.disabled=false;
+  windowInputs.forEach(i=>i.disabled=false);
+  $('download-data').disabled=$('download-forecast').disabled=false;
+  if('IntersectionObserver'in window){
+   const revealObserver=new IntersectionObserver(entries=>{
+    if(entries.some(e=>e.isIntersecting)){revealObserver.disconnect();reveal()}
+   },{threshold:.6});
+   revealObserver.observe(plot);
+  }
+  try{performance.measure('portfolio:chart-init',{start:initAt,end:performance.now()})}catch(_){}
+ }
+})();
+</script>
+</body>
+</html>

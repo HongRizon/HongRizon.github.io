@@ -1,0 +1,47 @@
+# Refreshes the USD/KRW snapshot after each weekly Federal Reserve H.10 release,
+# rebuilds index.html, validates it, and commits only when the data changed.
+# The page itself stays static: no runtime requests, no secrets, no dependencies.
+name: Update data
+
+on:
+  schedule:
+    - cron: "17 9 * * 2-6"   # Tue–Sat 09:17 UTC; H.10 is published on Mondays (US afternoon)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-data
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Fetch the latest observations
+        id: fetch
+        run: |
+          set -euo pipefail
+          node tools/fetch-data.mjs | tee fetch.log
+          if grep -q "^Updated data/" fetch.log; then echo "changed=true" >> "$GITHUB_OUTPUT"; else echo "changed=false" >> "$GITHUB_OUTPUT"; fi
+      - name: Rebuild the page
+        if: steps.fetch.outputs.changed == 'true'
+        run: node build.mjs
+      - name: Validate the page
+        if: steps.fetch.outputs.changed == 'true'
+        run: npx --yes html-validate@8 --config qa/.htmlvalidate.json index.html
+      - name: Commit
+        if: steps.fetch.outputs.changed == 'true'
+        run: |
+          set -euo pipefail
+          latest=$(tail -1 data/usdkrw.csv | cut -d, -f1)
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/usdkrw.csv data/usdkrw.json index.html
+          git commit -m "data: observations through ${latest}"
+          git push

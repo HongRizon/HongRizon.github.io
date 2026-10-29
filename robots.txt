@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://hongrizon.github.io/sitemap.xml
