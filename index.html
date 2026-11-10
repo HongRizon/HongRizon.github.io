@@ -417,7 +417,7 @@ tbody th{font-weight:400;color:var(--muted)}
 
 /* Print: the page becomes a one-page curriculum vitae, in every theme. */
 @media print{
- @page{margin:11mm 13mm}
+ @page{margin:9mm 13mm}
  :root,:root[data-theme="dark"],:root:not([data-theme="light"]){
   --paper:#fff;--surface:#fff;--ink:#000;--muted:#333;--line:#bbb;--strong:#777;--accent:#000;--up:#000;--down:#000;color-scheme:light
  }
@@ -426,7 +426,7 @@ tbody th{font-weight:400;color:var(--muted)}
  .site-header,.work,.hero-aside,.hero-actions,.identity-strip,.section-lede,#contact,.footer,.toast,.skip{display:none!important}
  .print-only{display:block!important}
  .wrap{width:auto;max-width:none;margin:0}
- .hero{padding:0 0 7pt;border-bottom:1px solid #000}
+ .hero{padding:0 0 5pt;border-bottom:1px solid #000}
  .hero-grid{display:block}
  .role{font-size:8pt;margin-bottom:3pt;color:#333}
  h1{font-size:22pt;letter-spacing:-.025em;margin:0 0 5pt}
@@ -435,27 +435,27 @@ tbody th{font-weight:400;color:var(--muted)}
  .hero-copy{font-size:8.5pt;line-height:1.35;max-width:none;color:#333}
  .cv-contact{font-size:8pt;margin-top:5pt;color:#000}
  .cv-contact span+span::before{content:"  ·  "}
- .content-section{padding:6pt 0;border-top:0}
+ .content-section{padding:4pt 0;border-top:0}
  .section-grid{display:block}
- .section-rail{margin-bottom:3pt;break-after:avoid}
+ .section-rail{margin-bottom:2pt;break-after:avoid}
  .section-rail h2{font:600 10pt/1.3 var(--sans);letter-spacing:0}
  .research-list,.paper-list,.education-list,.record-column>h3{border-top-color:#000}
- .research-item{grid-template-columns:8mm 42mm minmax(0,1fr);gap:4mm;padding:3pt 0}
+ .research-item{grid-template-columns:8mm 42mm minmax(0,1fr);gap:4mm;padding:2.5pt 0}
  .research-item::before{font-size:7.5pt;padding-top:1pt}
  .research-item h3{font-size:9pt;line-height:1.3}
  .research-item p{grid-column:3;font-size:8pt;line-height:1.35}
- .paper{grid-template-columns:12mm minmax(0,1fr);gap:4mm;padding:4pt 0}
+ .paper{grid-template-columns:12mm minmax(0,1fr);gap:4mm;padding:3pt 0}
  .paper-year{font-size:7.5pt;padding-top:1pt}
  .paper h3{font-size:9pt;line-height:1.35;margin-bottom:1.5pt}
  .paper p{font-size:8pt;line-height:1.35}
  .record-grid{display:grid;grid-template-columns:1fr 1fr;gap:8mm}
  .record-column>h3{font-size:9pt;padding-top:3pt;margin-bottom:5pt}
- .entry{gap:1.5pt;padding-bottom:5pt;margin-bottom:5pt}
+ .entry{gap:1.5pt;padding-bottom:4pt;margin-bottom:4pt}
  .entry b{font-size:9pt;line-height:1.3}
  .org,.note{font-size:8pt;line-height:1.35}
  .note{margin-top:1.5pt}
- .when{font-size:7.5pt}
- .degree{grid-template-columns:26mm minmax(0,1fr) 44mm;gap:4mm;padding:3pt 0}
+ .when{font-size:7.5pt;line-height:1.3}
+ .degree{grid-template-columns:26mm minmax(0,1fr) 44mm;gap:4mm;padding:2.5pt 0}
  .degree .year{font-size:7.5pt;padding-top:1pt}
  .degree strong{font-size:9pt;line-height:1.3}
  .degree .school{grid-column:3;font-size:8pt}
@@ -509,8 +509,8 @@ tbody th{font-weight:400;color:var(--muted)}
     <div class="hero-aside">
      <h2 class="aside-title" id="glance-title">At a glance</h2>
      <ul class="facts" aria-labelledby="glance-title">
-      <li><strong>2nd in Korea, 98th worldwide</strong><span>WorldQuant BRAIN Python Alphas Competition 2026</span></li>
-      <li><strong>Three first-author papers</strong><span>Financial forecasting, multimodal learning, and market representations</span></li>
+      <li><strong>2nd in Korea, 31st worldwide</strong><span>WorldQuant BRAIN All Region Competition 2026</span></li>
+      <li><strong>Four first-author papers</strong><span>Financial forecasting, multimodal learning, and market representations</span></li>
       <li><strong>WorldQuant BRAIN consultant</strong><span>Alpha research, 2024 to present</span></li>
      </ul>
     </div>
@@ -660,6 +660,13 @@ tbody th{font-weight:400;color:var(--muted)}
      <li class="paper">
       <span class="paper-year">2026</span>
       <div>
+       <h3>Theoretical and Empirical Analysis with Monte Carlo Simulation of Nearly Unstable Random Coefficient Count Time Series Models</h3>
+       <p>SeungBin Hong, Jiwon Kang. International Journal on Advanced Science, Engineering and Information Technology (IJASEIT), vol.&nbsp;16, no.&nbsp;5, pp.&nbsp;1575–1583. First author. Scopus-indexed.</p>
+      </div>
+     </li>
+     <li class="paper">
+      <span class="paper-year">2026</span>
+      <div>
        <h3>Macro-FX multimodal fusion (MFMF): USD/KRW directional forecasting</h3>
        <p>Korean Data and Information Science Society (KDISS). First author. Presentation award, honorable mention.</p>
       </div>
@@ -674,7 +681,7 @@ tbody th{font-weight:400;color:var(--muted)}
      <li class="paper">
       <span class="paper-year">2025</span>
       <div>
-       <h3><a href="https://ack.kips.or.kr/society/kips/conference/ack2025/file/downloadSoConfManuscript/abs/KIPS_C2025B0374F">Volume-encoded candlesticks for real-time stablecoin volatility detection with ViT<span class="ext" aria-hidden="true"> ↗</span></a></h3>
+       <h3>Volume-encoded candlesticks for real-time stablecoin volatility detection with ViT</h3>
        <p>Seung-Bin Hong, Jung-Woon Kang, Min-Cheol Kim. ACK 2025, proceedings vol. 32, no. 2, pp. 829–830.</p>
       </div>
      </li>
@@ -719,6 +726,13 @@ tbody th{font-weight:400;color:var(--muted)}
      <div class="record-column" id="honors">
       <h3>Honors and competition results</h3>
       <ul>
+       <li class="entry">
+        <div>
+         <b>2nd in Korea, 31st worldwide</b>
+         <span class="org"><a href="https://platform.worldquantbrain.com/competition/ARC2026">All Region Competition 2026<span class="ext" aria-hidden="true"> ↗</span></a>, WorldQuant BRAIN</span>
+        </div>
+        <span class="when">2026</span>
+       </li>
        <li class="entry">
         <div>
          <b>2nd in Korea, 98th worldwide</b>
